@@ -1,8 +1,8 @@
 #!/usr/local/bin/php
 <?php
 
-require_once('../data.php');
-require_once('quotes.php');
+require_once(__DIR__ . '/../data.php');
+require_once(__DIR__ . '/quotes.php');
 
 $ch = curl_init("https://tea-ebook.hipchat.com/v2/room/1291826/notification?auth_token=XxwKfgtC9aIfpyrHzq1EEsaKPlynYYxl973dG1ha");
 $data = array(
