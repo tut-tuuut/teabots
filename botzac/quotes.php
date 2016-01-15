@@ -7,4 +7,5 @@ $quotes = [
     "Je tente même pas le plan B, je passe au plan Z",
     "De toute façon c'est pas la taille qui compte, c'est le coefficient de dilatation",
     "Si vous avez le coeur sur la main, vous devez avoir les fesses à une drôle de place",
+    "Faut pas se mettre la rate au court-bouillon !",
 ];
