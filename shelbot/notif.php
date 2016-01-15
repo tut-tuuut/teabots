@@ -3,7 +3,7 @@
 
 $ch = curl_init('https://tea-ebook.hipchat.com/v2/room/487692/notification?auth_token=miYJfXA6hgBPZ3P4EEkibEP9Iarb8Nsd7r22ZV2d');
 $data = array(
-    'color' => 'yellow',
+    'color' => 'purple',
     'message' => 'Standup !',
     'notify' => true,
     'message_format' => 'text'
