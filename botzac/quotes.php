@@ -8,4 +8,5 @@ $quotes = [
     "De toute façon c'est pas la taille qui compte, c'est le coefficient de dilatation",
     "Si vous avez le coeur sur la main, vous devez avoir les fesses à une drôle de place",
     "Faut pas se mettre la rate au court-bouillon !",
+    "Ce n'est pas aux vieux singes qu'on apprend à faire la grimace",
 ];
