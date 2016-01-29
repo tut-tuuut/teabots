@@ -1,6 +1,8 @@
 #!/usr/local/bin/php
 <?php
 
+require_once(__DIR__ . '/../config.php');
+
 $color = 'purple';
 if (sizeof($argv) >= 2) {
     parse_str($argv[1]);
@@ -10,7 +12,7 @@ if (sizeof($argv) >= 3) {
 }
 
 if (isset($message)) {
-    $ch = curl_init('https://tea-ebook.hipchat.com/v2/room/487692/notification?auth_token=miYJfXA6hgBPZ3P4EEkibEP9Iarb8Nsd7r22ZV2d');
+    $ch = curl_init('https://tea-ebook.hipchat.com/v2/room/' . $roomDev . '/notification?auth_token=' . $tokenDev);
     $data = array(
         'color' => $color,
         'message' => urldecode($message),

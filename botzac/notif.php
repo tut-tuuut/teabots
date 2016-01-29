@@ -1,10 +1,11 @@
 #!/usr/local/bin/php
 <?php
 
+require_once(__DIR__ . '/../config.php');
 require_once(__DIR__ . '/../data.php');
 require_once(__DIR__ . '/quotes.php');
 
-$ch = curl_init("https://tea-ebook.hipchat.com/v2/room/1291826/notification?auth_token=XxwKfgtC9aIfpyrHzq1EEsaKPlynYYxl973dG1ha");
+$ch = curl_init('https://tea-ebook.hipchat.com/v2/room/' . $roomDev . '/notification?auth_token=' . $tokenDev);
 $data = array(
     "color" => $colors[array_rand($colors)],
     "message" => $quotes[array_rand($quotes)],
