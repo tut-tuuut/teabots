@@ -3,16 +3,26 @@
 
 require_once(__DIR__ . '/../config.php');
 
-$color = 'purple';
+// room
 if (sizeof($argv) >= 2) {
     parse_str($argv[1]);
+} else {
+    die('room is mandatory');
 }
+
+// message
 if (sizeof($argv) >= 3) {
     parse_str($argv[2]);
 }
 
+// color
+$color = 'purple';
+if (sizeof($argv) >= 4) {
+    parse_str($argv[3]);
+}
+
 if (isset($message)) {
-    $ch = curl_init('https://tea-ebook.hipchat.com/v2/room/' . $roomDev . '/notification?auth_token=' . $tokenDev);
+    $ch = curl_init('https://tea-ebook.hipchat.com/v2/room/' . $rooms[$room]['id'] . '/notification?auth_token=' . $rooms[$room]['token']);
     $data = array(
         'color' => $color,
         'message' => urldecode($message),
