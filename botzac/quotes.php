@@ -9,4 +9,6 @@ $quotes = [
     "Si vous avez le coeur sur la main, vous devez avoir les fesses à une drôle de place",
     "Faut pas se mettre la rate au court-bouillon !",
     "Ce n'est pas aux vieux singes qu'on apprend à faire la grimace",
+    "C'est une orthodoxie à géométrie variable ce machin.",
+    "On a en tout autour du bide des serveurs."
 ];
