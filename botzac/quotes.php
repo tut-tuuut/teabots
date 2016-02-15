@@ -10,5 +10,6 @@ $quotes = [
     "Faut pas se mettre la rate au court-bouillon !",
     "Ce n'est pas aux vieux singes qu'on apprend à faire la grimace",
     "C'est une orthodoxie à géométrie variable ce machin.",
-    "On a en tout autour du bide des serveurs."
+    "On a en tout autour du bide des serveurs.",
+    "C'est la foire d'empoigne !",
 ];
