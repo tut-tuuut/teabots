@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
 
-require_once(__DIR__ . '/../config.php');
 require_once(__DIR__ . '/../data.php');
+require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/quotes.php');
 
 // room

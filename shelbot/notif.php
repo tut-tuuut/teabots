@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-require_once(__DIR__ . '/../config.php');
+require_once(__DIR__ . '/config.php');
 
 // room
 if (sizeof($argv) >= 2) {
