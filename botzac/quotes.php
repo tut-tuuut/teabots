@@ -12,4 +12,5 @@ $quotes = [
     "C'est une orthodoxie à géométrie variable ce machin.",
     "On a en tout autour du bide des serveurs.",
     "C'est la foire d'empoigne !",
+    "Ils savent faire de l'informatique comme moi je parle serbo-croate du nord.",
 ];
