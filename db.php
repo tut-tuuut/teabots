@@ -1,6 +1,6 @@
 <?php
 
-$db = new SQLite3('teabots.db');
+$db = new SQLite3(__DIR__ . '/teabots.db');
 $db->exec('CREATE TABLE IF NOT EXISTS botzac (id INTEGER PRIMARY KEY, quote TEXT, total INTEGER)');
 
 function getLeastQuotedPhrase($db) {
