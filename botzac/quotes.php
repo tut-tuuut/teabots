@@ -15,4 +15,5 @@ $quotes = [
     "Ils savent faire de l'informatique comme moi je parle serbo-croate du nord.",
     "Faudrait pas qu'il se gratte tout seul la biscotte dans son coin.",
     "Airbrake marche pas, il a l'air brake.",
+    "Ici, Dieu c'est moi.",
 ];
