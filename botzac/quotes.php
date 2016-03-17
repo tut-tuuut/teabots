@@ -16,5 +16,5 @@ $quotes = [
     "Faudrait pas qu'il se gratte tout seul la biscotte dans son coin.",
     "Airbrake marche pas, il a l'air brake.",
     "Ici, Dieu c'est moi.",
-    "Je men tappe le coquillard.",
+    "Je men tape le coquillard.",
 ];
