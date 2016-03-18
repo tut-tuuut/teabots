@@ -1,6 +1,6 @@
 <?php
 $quotes = [
-    "Les serveurs se frisent la moustache",
+    "Les serveurs se frisent les moustaches",
     "Faut pas pousser mémé dans les orties",
     "On avait un peu de gras sur France Loisirs, mais on va jongler",
     "C'est à la fin de la foire qu'on compte les bouses",
