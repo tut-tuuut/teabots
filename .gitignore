@@ -1,3 +1,4 @@
 .idea
-config.tea.php
+config.tea.*
 teabots.db
+node_modules/
