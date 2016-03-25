@@ -1,5 +1,5 @@
 'use strict'
-const config = require(__dirname + '/config.test.js');
+const config = require(__dirname + '/config.js');
 const Twit = require('twit');
 const HC = require('node-hipchat');
 
