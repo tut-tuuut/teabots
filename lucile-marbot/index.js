@@ -26,6 +26,7 @@ console.log('Listening to Twitter, tracking ' + config['twitter_keywords'].join(
 stream.on('tweet', function (tweet) {
   // posting to HipChat
   let content = params;
-  content.message = tweet.text;
+  const url = `http://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
+  content.message = `<a href="${url}">${url}</a>`;
   hipchat.postMessage(params, null);
 });
