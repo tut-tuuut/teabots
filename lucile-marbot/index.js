@@ -15,8 +15,9 @@ let hipchat = new HC(config['hipchat_key']);
 const params = {
   'room': config['hipchat_room'],
   'from': config['hipchat_bot'],
+  'message_format': 'html',
   'color': 'gray',
-  'notify': 0
+  'notify': 1
 };
 
 // Listen to TEA twitter accounts
