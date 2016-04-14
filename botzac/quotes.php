@@ -17,4 +17,5 @@ $quotes = [
     "Airbrake marche pas, il a l'air brake.",
     "Ici, Dieu c'est moi.",
     "Je men tape le coquillard.",
+    "C'est pas ceinture-bretelles, c'est ceinture-bretelles-parachute",
 ];
