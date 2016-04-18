@@ -1,7 +1,7 @@
 'use strict'
 const config = require(__dirname + '/config.js');
 const Twit = require('twit');
-const HC = require('node-hipchat');
+const HC = require('node-hipchat-plus');
 
 let twitter = new Twit({
   consumer_key: config['twitter_consumer_key'],
@@ -11,13 +11,30 @@ let twitter = new Twit({
   timeout_ms: 60*1000  // optional HTTP request timeout to apply to all requests.
 });
 
-let hipchat = new HC(config['hipchat_key']);
+let hipchat = new HC(config['hipchat_auth']);
 const params = {
-  'room': config['hipchat_room'],
+  'room_id': config['hipchat_room'],
   'from': config['hipchat_bot'],
   'message_format': 'html',
   'color': 'gray',
-  'notify': 1
+  'notify': true
+};
+
+const buildCard = (tweet) => {
+  return {
+    "style": "application",
+    "url": `http://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`,
+    "format": "medium",
+    "id": tweet.id_str,
+    "title": `${tweet.user.name} sur Twitter`,
+    "description": {
+      "value": tweet.text,
+      "format": "html"
+    },
+    "icon": {
+      "url": tweet.user.profile_image_url
+    }
+  };
 };
 
 // Listen to TEA twitter accounts
@@ -27,7 +44,11 @@ console.log('Listening to Twitter, tracking ' + config['twitter_keywords'].join(
 stream.on('tweet', function (tweet) {
   // posting to HipChat
   let content = params;
-  const url = `http://twitter.com/${tweet.user.screen_name}/status/${tweet.id_str}`;
-  content.message = `<a href="${url}">${url}</a>`;
-  hipchat.postMessage(params, null);
+  content.message = tweet.text;
+  content.card = buildCard(tweet);
+  hipchat.postMessage(content, function (data, error) {
+    if (error) {
+      console.error(error);
+    }
+  });
 });

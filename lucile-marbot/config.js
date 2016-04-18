@@ -1,7 +1,7 @@
 'use strict'
 
 const config = {
-  'hipchat_key': '',
+  'hipchat_auth': '',
   'hipchat_room': 0,
   'hipchat_bot': 'Bot',
   'twitter_consumer_key': '',

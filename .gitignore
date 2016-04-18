@@ -1,4 +1,5 @@
 .idea
 config.tea.*
+config.test.*
 teabots.db
 node_modules/
