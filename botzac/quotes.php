@@ -18,5 +18,6 @@ $quotes = [
     "Ici, Dieu c'est moi.",
     "Je men tape le coquillard.",
     "C'est pas ceinture-bretelles, c'est ceinture-bretelles-parachute",
-    "C'est un sac de nouilles incroyable."
+    "C'est un sac de nouilles incroyable.",
+    "On n'a pas le cul propre sur ce sujet.",
 ];
