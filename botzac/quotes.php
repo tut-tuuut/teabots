@@ -21,4 +21,5 @@ $quotes = [
     "C'est un sac de nouilles incroyable.",
     "On n'a pas le cul propre sur ce sujet.",
     "Ils avancent à la vitesse d'un escargot anémié.",
+    "Le firewall t'envoie un paquet trop gros, et après, ça part en couille.",
 ];
