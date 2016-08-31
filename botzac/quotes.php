@@ -22,4 +22,7 @@ $quotes = [
     "On n'a pas le cul propre sur ce sujet.",
     "Ils avancent à la vitesse d'un escargot anémié.",
     "Le firewall t'envoie un paquet trop gros, et après, ça part en couille.",
+    "C'est l'armée mexicaine leur boite.",
+    "On s'enferme dans la cuisine, on met la traviata et on allume le gaz.",
+    "Les devs chez TEA, ils font des trucs géniaux sur leurs blogs persos et les conneries, ils les font sur tea-ebook.com",
 ];
