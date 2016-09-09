@@ -13,7 +13,7 @@ $quotes = [
     "On a en tout autour du bide des serveurs.",
     "C'est la foire d'empoigne !",
     "Ils savent faire de l'informatique comme moi je parle serbo-croate du nord.",
-    "Faudrait pas qu'il se gratte tout seul la biscotte dans son coin.",
+    "Faudrait pas qu'il se grignote tout seul la biscotte dans son coin.",
     "Airbrake marche pas, il a l'air brake.",
     "Ici, Dieu c'est moi.",
     "Je men tape le coquillard.",
