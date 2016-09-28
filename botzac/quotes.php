@@ -25,4 +25,9 @@ $quotes = [
     "C'est l'armée mexicaine leur boite.",
     "On s'enferme dans la cuisine, on met la traviata et on allume le gaz.",
     "Les devs chez TEA, ils font des trucs géniaux sur leurs blogs persos et les conneries, ils les font sur tea-ebook.com",
+    "Avec mes petites mains potelées, je lui ai fait la danse du ventre.",
+    "On a un MySQL bien branlé.",
+    "Je suis désolé mon coco.",
+    "C'est un truc un peu bite-couteau ça.",
+    "Il est pas très joli, il est à notre image.",
 ];
