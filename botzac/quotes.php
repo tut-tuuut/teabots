@@ -30,4 +30,5 @@ $quotes = [
     "Je suis désolé mon coco.",
     "C'est un truc un peu bite-couteau ça.",
     "Il est pas très joli, il est à notre image.",
+    "Maintenant qu'on a une force de frappe, on se rend compte qu'on est à poil.",
 ];
