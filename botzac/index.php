@@ -1,13 +1,9 @@
 <?php
 
-require_once(__DIR__ . '/../db.php');
 require_once(__DIR__ . '/../data.php');
 require_once(__DIR__ . '/quotes.php');
 
-loadQuotes($db, $quotes);
-
-$quote = getLeastQuotedPhrase($db);
-incrementQuoteTotal($db, $quote['id']);
+$quote = $quotes[array_rand($quotes)];
 
 $response = [
     'color' => $colors[array_rand($colors)],

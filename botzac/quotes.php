@@ -32,4 +32,5 @@ $quotes = [
     "Il est pas très joli, il est à notre image.",
     "Maintenant qu'on a une force de frappe, on se rend compte qu'on est à poil.",
     "Là on va ouvrir les entrailles d'un #ePub",
+    "Plus on est près, moins on est loin.",
 ];
