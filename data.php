@@ -1,2 +1,2 @@
 <?php
-$colors = [ "red", "purple", "yellow" ];
+$colors = [ "purple", "yellow" ];
