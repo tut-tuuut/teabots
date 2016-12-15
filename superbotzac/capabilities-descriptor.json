@@ -1,10 +1,10 @@
 {
-  "name": "Super BotZac",
-  "description": "BotZac enhanced",
-  "key": "super-botzac-addon",
+  "name": "SuperBotZac",
+  "description": "SuperBotZac Addon",
+  "key": "superbotzac-hipchat-addon",
   "links": {
-    "homepage": "http://teabots.jops-dev.com/superbotzac",
-    "self": "http://teabots.jops-dev.com/superbotzac/capabilities.json"
+    "homepage": "${host}",
+    "self": "${host}/capabilities.json"
   },
   "vendor": {
     "name": "JoPs",
@@ -12,16 +12,16 @@
   },
   "capabilities": {
     "hipchatApiConsumer": {
-      "fromName": "BotZac",
+      "fromName": "SuperBotZac",
       "scopes": [
         "send_notification"
       ]
     },
     "installable": {
-      "allowGlobal": true,
+      "allowGlobal": false,
       "allowRoom": true,
-      "callbackUrl": "http://teabots.jops-dev.com/superbotzac/installed",
-      "uninstalledUrl": "http://teabots.jops-dev.com/superbotzac/uninstalled"
+      "callbackUrl": "${host}/installed",
+      "uninstalledUrl": "${host}/uninstalled"
     },
     "webhook": [
       {
