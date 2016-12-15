@@ -16,7 +16,7 @@ $quotes = [
     "Faudrait pas qu'il se grignote tout seul la biscotte dans son coin.",
     "Airbrake marche pas, il a l'air brake.",
     "Ici, Dieu c'est moi.",
-    "Je men tape le coquillard.",
+    "Je m'en tape le coquillard.",
     "C'est pas ceinture-bretelles, c'est ceinture-bretelles-parachute.",
     "C'est un sac de nouilles incroyable.",
     "On n'a pas le cul propre sur ce sujet.",
