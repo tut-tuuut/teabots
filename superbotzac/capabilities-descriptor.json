@@ -25,11 +25,11 @@
     },
     "webhook": [
       {
-        "url": "${host}/echo",
+        "url": "${host}/record",
         "event": "room_message",
         "pattern": ".*",
-        "name": "Echo",
-        "authentication": "jwt"
+        "name": "Record",
+        "authentication": "none"
       }
     ]
   }
