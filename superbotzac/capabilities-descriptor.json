@@ -1,7 +1,7 @@
 {
-  "name": "SuperBotZac",
-  "description": "SuperBotZac Addon",
-  "key": "superbotzac-hipchat-addon",
+  "name": "BigBrother",
+  "description": "BigBrother Addon",
+  "key": "bigbrother-hipchat-addon",
   "links": {
     "homepage": "${host}",
     "self": "${host}/capabilities.json"
@@ -12,14 +12,14 @@
   },
   "capabilities": {
     "hipchatApiConsumer": {
-      "fromName": "SuperBotZac",
+      "fromName": "BigBrother",
       "scopes": [
         "send_notification"
       ]
     },
     "installable": {
-      "allowGlobal": false,
-      "allowRoom": true,
+      "allowGlobal": true,
+      "allowRoom": false,
       "callbackUrl": "${host}/installed",
       "uninstalledUrl": "${host}/uninstalled"
     },
@@ -29,7 +29,7 @@
         "event": "room_message",
         "pattern": ".*",
         "name": "Record",
-        "authentication": "none"
+        "authentication": "jwt"
       }
     ]
   }

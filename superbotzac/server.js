@@ -308,7 +308,7 @@ app.post('/record',
         body: {
           author: message.from.name,
           message: message.message,
-          room: room.name
+          room: room.name,
           date: message.date
         }
       }, function (error, response) {
