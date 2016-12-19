@@ -39,31 +39,32 @@ module.exports = {
 
   searchTerm(term) {
     return esClient.search({
-        q: term,
-        size: 10
-      }).then(resp => {
-        var hits = resp.hits.hits;
-        if (hits.length === 0) {
-          return `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
+      index: INDEX_NAME,
+      q: term,
+      size: 10
+    }).then(resp => {
+      var hits = resp.hits.hits;
+      if (hits.length === 0) {
+        return `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
+      } else {
+        var nbResults = resp.hits.total;
+        if (nbResults > 10) {
+          var content = `Voici les 10 premiers résultats de votre recherche "${term}" :<br/>`;
         } else {
-          var nbResults = resp.hits.total;
-          if (nbResults > 10) {
-            var content = `Voici les 10 premiers résultats de votre recherche "${term}" :<br/>`;
-          } else {
-            var content = `Voici les ${nbResults} résultats de votre recherche "${term}" :<br/>`;
-          }
+          var content = `Voici les ${nbResults} résultats de votre recherche "${term}" :<br/>`;
+        }
 
-          hits = hits.map(hit => {
-            var message = hit._source.message.replace(term, '<b>' + term + '</b>');
-            var date = new Date(hit._source.date);
+        hits = hits.map(hit => {
+          var message = hit._source.message.replace(term, '<b>' + term + '</b>');
+          var date = new Date(hit._source.date);
 
-            return `<td>${hit._source.author} <i>(@${hit._source.username})</i></td>
+          return `<td>${hit._source.author} <i>(@${hit._source.username})</i></td>
 <td>${date.toUTCString()}</td>
 <td>${message}</td>`;
-          });
-          content += `<table><tr>${hits.join('</tr><tr>')}</tr></table>`;
-          return content;
-        }
+        });
+        content += `<table><tr>${hits.join('</tr><tr>')}</tr></table>`;
+        return content;
+      }
     }, err => {
       console.trace(err.message);
       return `Une erreur est survenue :( => ${err.message}`;
