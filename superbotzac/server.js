@@ -10,7 +10,9 @@
  * The comprehensive HipChat API reference can be found here: https://www.hipchat.com/docs/apiv2
  */
 
-var esClient = require('./elastic');
+const esClient = require('./elastic');
+const store = require('./store');
+
 var _ = require('lodash');
 var fs = require('fs');
 var express = require('express');
@@ -26,17 +28,6 @@ var app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-/**
- * This implementation doesn't make any assumption in terms of data store, frameworks used, etc.
- * It doesn't have proper persistence, everything is just stored in memory.
- */
-
-//Store for all add-on installations (OAuthID, shared secret, API baseUrl, etc.)
-var installationStore = {};
-//Store for API access tokens, used when making REST calls to HipChat
-var accessTokenStore = {};
-
 
 /**
  * Your add-on exposes a capabilities descriptor , which tells HipChat how the add-on plans to extend it.
@@ -82,7 +73,7 @@ app.post('/installed', function (req, res) {
 
   var installation = req.body;
   var oauthId = installation['oauthId'];
-  installationStore[oauthId] = installation;
+  store.addInstallation(installation);
 
   // Retrieve the capabilities document
   var capabilitiesUrl = installation['capabilitiesUrl'];
@@ -110,11 +101,10 @@ app.get('/uninstalled', function (req, res) {
     var installation = JSON.parse(body);
     logger.info(installation, installable_url);
 
-    delete installationStore[installation['oauthId']];
-    delete accessTokenStore[installation['oauthId']];
-
-    // Redirect back to HipChat to complete the uninstallation
-    res.redirect(redirectUrl);
+    store.removeInstallation(installation)
+      .then(() => store.removeAccessToken(installation['oauthId']))
+      // Redirect back to HipChat to complete the uninstallation
+      .then(() => res.redirect(redirectUrl));
   });
 });
 
@@ -139,46 +129,48 @@ function isExpired(accessToken) {
 }
 
 function refreshAccessToken(oauthId, callback) {
-  var installation = installationStore[oauthId];
-  var params = {
-    // The token url was discovered through the capabilities document
-    uri: installation.tokenUrl,
-    // Basic auth with OAuth credentials received on installation
-    auth: {
-      username: installation['oauthId'],
-      password: installation['oauthSecret']
-    },
-    // OAuth dictates application/x-www-form-urlencoded parameters
-    // In terms of scope, you can either to request a subset of the scopes declared in the add-on descriptor
-    // or, if you don't, HipChat will use the scopes declared in the descriptor
-    form: {
-      grant_type: 'client_credentials',
-      scope: 'send_notification'
-    }
-  };
-  logger.info(params, installation.tokenUrl);
-
-  request.post(params, function (err, response, body) {
-    var accessToken = JSON.parse(body);
-    logger.info(accessToken, installation.tokenUrl);
-    accessTokenStore[oauthId] = {
-      // Add a minute of leeway
-      expirationTimeStamp: Date.now() + ((accessToken['expires_in'] - 60) * 1000),
-      token: accessToken
+  store.getInstallation(oauthId).then(installation => {
+    var params = {
+      // The token url was discovered through the capabilities document
+      uri: installation.tokenUrl,
+      // Basic auth with OAuth credentials received on installation
+      auth: {
+        username: installation['oauthId'],
+        password: installation['oauthSecret']
+      },
+      // OAuth dictates application/x-www-form-urlencoded parameters
+      // In terms of scope, you can either to request a subset of the scopes declared in the add-on descriptor
+      // or, if you don't, HipChat will use the scopes declared in the descriptor
+      form: {
+        grant_type: 'client_credentials',
+        scope: 'send_notification'
+      }
     };
-    callback(accessToken);
+    logger.info(params, installation.tokenUrl);
+
+    request.post(params, function (err, response, body) {
+      var accessToken = JSON.parse(body);
+      logger.info(accessToken, installation.tokenUrl);
+
+      store.addAccessToken(oauthId, {
+        // Add a minute of leeway
+        expirationTimeStamp: Date.now() + ((accessToken['expires_in'] - 60) * 1000),
+        token: accessToken
+      }).then(() => callback(accessToken));
+    });
   });
 }
 
 function getAccessToken(oauthId, callback) {
-  var accessToken = accessTokenStore[oauthId];
-  if (!accessToken || isExpired(accessToken)) {
-    refreshAccessToken(oauthId, callback);
-  } else {
-    process.nextTick(function () {
-      callback(accessToken.token);
-    });
-  }
+  store.getAccessToken(oauthId).then(accessToken => {
+    if (!accessToken || isExpired(accessToken)) {
+      refreshAccessToken(oauthId, callback);
+    } else {
+      process.nextTick(function () {
+        callback(accessToken.token);
+      });
+    }
+  });
 }
 
 /**
@@ -189,47 +181,20 @@ function getAccessToken(oauthId, callback) {
  */
 
 function sendMessage(oauthId, roomId, message) {
-  var installation = installationStore[oauthId];
-  var notificationUrl = installation.apiUrl + 'room/' + roomId + '/notification';
-  getAccessToken(oauthId, function (token) {
-    request.post(notificationUrl, {
-      auth: {
-        bearer: token['access_token']
-      },
-      json: message
-    }, function (err, response, body) {
-      logger.info(err || response.statusCode, notificationUrl);
-      logger.info(response);
+  store.getInstallation(oauthId).then(installation => {
+    var notificationUrl = installation.apiUrl + 'room/' + roomId + '/notification';
+    getAccessToken(oauthId, function (token) {
+      request.post(notificationUrl, {
+        auth: {
+          bearer: token['access_token']
+        },
+        json: message
+      }, function (err, response, body) {
+        logger.info(err || response.statusCode, notificationUrl);
+        logger.info(response);
+      });
     });
   });
-}
-
-function sendHtmlMessage(oauthId, roomId, text) {
-  var message = {
-    color: 'gray',
-    message: text,
-    message_format: 'html'
-  };
-  sendMessage(oauthId, roomId, message)
-}
-
-function sendSampleCardMessage(oauthId, roomId, description) {
-  var message = {
-    color: 'gray',
-    message: 'this is a backup message for HipChat clients that do not understand cards (old HipChat clients, 3rd party XMPP clients)',
-    message_format: 'text',
-    card: {
-      "style": "application",
-      "id": "some_id",
-      "url": "http://www.stuff.com",
-      "title": "Such awesome. Very API. Wow!",
-      "description": description,
-      "thumbnail": {
-        "url": "http://i.ytimg.com/vi/8M7Qie4Aowk/hqdefault.jpg"
-      }
-    }
-  };
-  sendMessage(oauthId, roomId, message);
 }
 
 /**
@@ -246,19 +211,19 @@ function sendSampleCardMessage(oauthId, roomId, description) {
  */
 
 function validateJWT(req, res, next) {
-  try {
-    logger.info('validating JWT');
+  logger.info('validating JWT');
 
-    //Extract the JWT token
-    var encodedJwt = req.query['signed_request']
-      || req.headers['authorization'].substring(4)
-      || req.headers['Authorization'].substring(4);
+  //Extract the JWT token
+  var encodedJwt = req.query['signed_request']
+    || req.headers['authorization'].substring(4)
+    || req.headers['Authorization'].substring(4);
 
-    // Decode the base64-encoded token, which contains the oauth ID and room ID (to identify the installation)
-    var jwt = jwtUtil.decode(encodedJwt, null, true);
-    var oauthId = jwt['iss'];
-    var roomId = jwt['context']['room_id'];
-    var installation = installationStore[oauthId];
+  // Decode the base64-encoded token, which contains the oauth ID and room ID (to identify the installation)
+  var jwt = jwtUtil.decode(encodedJwt, null, true);
+  var oauthId = jwt['iss'];
+  var roomId = jwt['context']['room_id'];
+
+  store.getInstallation(oauthId).then(installation => {
     // Validate the token signature using the installation's OAuth secret sent by HipChat during add-on installation
     // (to ensure the call comes from this HipChat installation)
     jwtUtil.decode(encodedJwt, installation.oauthSecret);
@@ -269,10 +234,10 @@ function validateJWT(req, res, next) {
     // Continue with the rest of the call chain
     logger.info('Valid JWT');
     next();
-  } catch (err) {
+  }).catch(err => {
     logger.info('Invalid JWT');
     res.sendStatus(403);
-  }
+  });
 }
 
 //
