@@ -14,22 +14,26 @@ const elastic = require('./elastic');
 const store = require('./store');
 const config = require('./config.json');
 
-var _ = require('lodash');
-var fs = require('fs');
-var express = require('express');
-var bodyParser = require('body-parser');
-var bunyan = require('bunyan');
-var request = require('request');
-var jwtUtil = require('jwt-simple');
-var logger = bunyan.createLogger({
+const _ = require('lodash');
+const fs = require('fs');
+const express = require('express');
+const exphbs  = require('express-handlebars');
+const bodyParser = require('body-parser');
+const bunyan = require('bunyan');
+const request = require('request');
+const jwtUtil = require('jwt-simple');
+const logger = bunyan.createLogger({
   name: 'search-addon',
   level: 'info'
 });
 
-var app = express();
+const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 /**
  * Your add-on exposes a capabilities descriptor , which tells HipChat how the add-on plans to extend it.
@@ -324,9 +328,11 @@ app.post('/record',
  * When a user clicks on the glance, HipChat opens an iframe in the sidebar, and loads a view (HTML/JavaScript/CSS) from your add-on.
  */
 
-app.get('/sidebar', validateJWT, function (req, res) {
+app.get('/sidebar', function (req, res) {
   logger.info(req.query, req.path);
-  res.redirect(`${config.endpoint}/sidebar.html`);
+  res.render('sidebar', {
+    endpoint: config.endpoint
+  });
 });
 
 app.post('/search', function (req, res) {
