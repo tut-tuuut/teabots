@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+curl -XDELETE 'localhost:9200/bigbrother'
+
 curl -XPUT 'localhost:9200/bigbrother' -d'
 {
   "settings": {
@@ -32,7 +34,6 @@ curl -XPUT 'localhost:9200/bigbrother' -d'
             "french_elision",
             "lowercase",
             "french_stop",
-            "french_keywords",
             "french_stemmer"
           ]
         }
