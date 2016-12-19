@@ -214,7 +214,7 @@ function sendPrivateMessage(oauthId, user, message) {
             json: {
               message: message,
               notify: true,
-              format: 'html'
+              message_format: 'html'
             }
         }, function (err, response, body) {
             logger.info(err || response.statusCode, notificationUrl);
@@ -302,12 +302,16 @@ app.post('/record',
         room: room.name,
         date: message.date
       });
-    } else if (message.message === '/search') {
-      console.log(message);
-      // room message
-      sendMessage(oauthId, room.id, 'Coucou je cherche pour toi ;)');
-      // private message
-      sendPrivateMessage(oauthId, message.from.id, 'Ouhou c\'est le bot qui te parle ^^');
+    } else if (message.message.startsWith('/search')) {
+      var term = message.message.replace('/search', '').trim();
+
+      if (term !== '') {
+        elastic.searchTerm(term)
+            .then(content => sendPrivateMessage(oauthId, message.from.id, content));
+      } else {
+        // room message
+        sendMessage(oauthId, room.id, 'Tu peux me demander une recherche en tapant `/search coucou`');
+      }
     }
 
     res.sendStatus(204);
