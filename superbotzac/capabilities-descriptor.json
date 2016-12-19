@@ -1,7 +1,7 @@
 {
   "name": "${name}",
   "description": "${name} Addon",
-  "key": "${name}-hipchat-addon",
+  "key": "${key}-hipchat-addon",
   "links": {
     "homepage": "${host}",
     "self": "${host}/capabilities.json"
@@ -31,6 +31,33 @@
         "pattern": ".*",
         "name": "Record",
         "authentication": "jwt"
+      }
+    ],
+    "glance": [
+      {
+        "key": "${key}-glance",
+        "name": {
+          "value": "${name} Search"
+        },
+        "icon": {
+          "url": "${host}/assets/icon.jpg",
+          "url@2x": "${host}/assets/icon.jpg"
+        },
+        "target": "${key}-sidebar"
+      }
+    ],
+    "webPanel": [
+      {
+        "key": "${key}-sidebar",
+        "name": {
+          "value": "${name} Sidebar"
+        },
+        "icon": {
+          "url": "${host}/assets/icon.jpg",
+          "url@2x": "${host}/assets/icon.jpg"
+        },
+        "location": "hipchat.sidebar.right",
+        "url": "${host}/sidebar"
       }
     ]
   }

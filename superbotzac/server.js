@@ -25,6 +25,7 @@ var logger = bunyan.createLogger({
   name: 'search-addon',
   level: 'info'
 });
+
 var app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -40,7 +41,8 @@ function substituteVars(file, req, callback) {
   fs.readFile(file, function (err, data) {
     var content = _.template(data, {
       host: config.endpoint,
-      name: config.name
+      name: config.name,
+      key: config.name.toLowerCase().replace(' ','')
     });
     callback(content);
   });
@@ -319,6 +321,31 @@ app.post('/record',
   }
 );
 
+/*
+ * HipChat sidebar View
+ * --------------------
+ * When a user clicks on the glance, HipChat opens an iframe in the sidebar, and loads a view (HTML/JavaScript/CSS) from your add-on.
+ * Your add-on declares a view in the capabilities descriptor:
+ * 		"webPanel" : [
+ *			{
+ *				"icon": {
+ *					"url": "${host}/resources/img/icon.png",
+ *					"url@2x": "${host}/resources/img/icon.png"
+ *				},
+ *				"key": "sample-sidebar",
+ *				"name": {
+ *					"value": "Sample sidebar"
+ *				},
+ *				"url": "${host}/sidebar",
+ *				"location": "hipchat.sidebar.right"
+ *			}
+ *		]
+ **/
+
+app.get('/sidebar', validateJWT, function (req, res) {
+  logger.info(req.query, req.path);
+  res.redirect('/sidebar.html');
+});
 
 /*
  * Start the add-on
