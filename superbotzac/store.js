@@ -1,5 +1,6 @@
 "use strict";
 
+const addonName = require('../config.json').name.replace(' ', '').toLowerCase();
 const Memcached = require('memcached');
 
 const memcached = new Memcached('127.0.0.1:11211');
@@ -9,7 +10,7 @@ const ACCESS_TOKEN_STORE_KEY = 'accessTokenStore';
 
 function getFromStore(key) {
   return new Promise((resolve, reject) => {
-    memcached.get(key, (err, data) => {
+    memcached.get(`${addonName}-${key}`, (err, data) => {
       if (err) {
         return reject(err);
       }
@@ -20,7 +21,7 @@ function getFromStore(key) {
 
 function createInStore(key, value) {
   return new Promise((resolve, reject) => {
-    memcached.set(key, value, 0, err => {
+    memcached.set(`${addonName}-${key}`, value, 0, err => {
       if (err) {
         return reject(err);
       }
@@ -31,7 +32,7 @@ function createInStore(key, value) {
 
 function updateStore(key, value) {
   return new Promise((resolve, reject) => {
-    memcached.replace(key, value, 0, err => {
+    memcached.replace(`${addonName}-${key}`, value, 0, err => {
       if (err) {
         return reject(err);
       }
