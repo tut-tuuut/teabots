@@ -287,10 +287,11 @@ function validateJWT(req, res, next) {
 app.post('/record',
   validateJWT, //will be executed before the function below, to validate the JWT token
   function (req, res) {
-    logger.info({ message: message, q: req.query }, req.path);
-
     var oauthId = res.locals.context.oauthId;
     var message = req.body.item.message;
+
+    logger.info({ message: message, q: req.query }, req.path);
+
     var room = req.body.item.room;
     if ((message.message.split(' ').length >= 2) && (message.message.indexOf('/') !== 0)) {
       // record message
@@ -322,6 +323,18 @@ app.post('/record',
 app.get('/sidebar', validateJWT, function (req, res) {
   logger.info(req.query, req.path);
   res.redirect(`${config.endpoint}/sidebar.html`);
+});
+
+app.post('/search', function (req, res) {
+  const search = req.body;
+  logger.info(search, req.path);
+
+  elastic.globalSearch(search.query).then(hits => {
+    console.log('search hits', hits);
+
+    res.set('Content-Type', 'application/json');
+    res.send(JSON.stringify(hits));
+  });
 });
 
 /*
