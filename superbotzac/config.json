@@ -1,5 +1,5 @@
 {
-  "endpoint": "http://example.com",
-  "name": "BigBrother",
-  "teabotToken": ""
+  "endpoint": "http://teabots.jops-dev.com/search",
+  "name": "Search",
+  "teabotToken": "9fC63J4b5u1iwv9Mxb690BQtvFzUdWgJmsXg9nLc"
 }

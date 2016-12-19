@@ -1,7 +1,7 @@
 {
   "name": "${name}",
   "description": "${name} Addon",
-  "key": "bigbrother-hipchat-addon",
+  "key": "${name}-hipchat-addon",
   "links": {
     "homepage": "${host}",
     "self": "${host}/capabilities.json"
@@ -14,7 +14,8 @@
     "hipchatApiConsumer": {
       "fromName": "${name}",
       "scopes": [
-        "send_notification"
+        "send_notification",
+        "send_message"
       ]
     },
     "installable": {

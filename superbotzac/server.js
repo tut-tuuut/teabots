@@ -20,9 +20,9 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var bunyan = require('bunyan');
 var request = require('request');
-var jwtUtil = require('jwt-simple')
+var jwtUtil = require('jwt-simple');
 var logger = bunyan.createLogger({
-  name: 'superbotzac-addon',
+  name: 'search-addon',
   level: 'info'
 });
 var app = express();
@@ -191,13 +191,34 @@ function sendMessage(oauthId, roomId, message) {
         auth: {
           bearer: token['access_token']
         },
-        json: message
+        json: {
+          message: message
+        }
       }, function (err, response, body) {
         logger.info(err || response.statusCode, notificationUrl);
         logger.info(response);
       });
     });
   });
+}
+
+function sendPrivateMessage(oauthId, user, message) {
+    store.getInstallation(oauthId).then(installation => {
+        var notificationUrl = installation.apiUrl + 'user/' + user + '/message';
+        request.post(notificationUrl, {
+            auth: {
+                bearer: config.teabotToken
+            },
+            json: {
+              message: message,
+              notify: true,
+              format: 'html'
+            }
+        }, function (err, response, body) {
+            logger.info(err || response.statusCode, notificationUrl);
+            logger.info(response);
+        });
+    });
 }
 
 /**
@@ -266,6 +287,7 @@ app.post('/record',
   function (req, res) {
     logger.info({ message: message, q: req.query }, req.path);
 
+    var oauthId = res.locals.context.oauthId;
     var message = req.body.item.message;
     var room = req.body.item.room;
     if ((message.message.split(' ').length >= 2) && (message.message.indexOf('/') !== 0)) {
@@ -285,6 +307,12 @@ app.post('/record',
           logger.error(error);
         }
       });
+    } else if (message.message === '/search') {
+      console.log(message);
+      // room message
+      sendMessage(oauthId, room.id, 'Coucou je cherche pour toi ;)');
+      // private message
+      sendPrivateMessage(oauthId, message.from.id, 'Ouhou c\'est le bot qui te parle ^^');
     }
 
     res.sendStatus(204);
@@ -300,6 +328,6 @@ app.all('*', function (req, res) {
   res.sendStatus(204);
 });
 
-var port = 4000;
+var port = 4001;
 app.listen(port);
 logger.info('HipChat sample add-on started: http://localhost:' + port);
