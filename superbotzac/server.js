@@ -10,7 +10,7 @@
  * The comprehensive HipChat API reference can be found here: https://www.hipchat.com/docs/apiv2
  */
 
-const esClient = require('./elastic');
+const elastic = require('./elastic');
 const store = require('./store');
 const config = require('./config.json');
 
@@ -294,20 +294,12 @@ app.post('/record',
     var room = req.body.item.room;
     if ((message.message.split(' ').length >= 2) && (message.message.indexOf('/') !== 0)) {
       // record message
-      esClient.index({
-        index: 'bigbrother',
-        type: 'message',
-        body: {
-          author: message.from['name'],
-          username: message.from['mention_name'],
-          message: message.message,
-          room: room.name,
-          date: message.date
-        }
-      }, function (error, response) {
-        if (error) {
-          logger.error(error);
-        }
+      elastic.saveMessage({
+        author: message.from['name'],
+        username: message.from['mention_name'],
+        message: message.message,
+        room: room.name,
+        date: message.date
       });
     } else if (message.message === '/search') {
       console.log(message);
