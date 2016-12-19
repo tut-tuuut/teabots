@@ -1,7 +1,8 @@
 <section id="content" role="main" class="ac-content">
-  <form class="search-form">
-    <input type="text" name="search" />
-    <button type="submit">Chercher</button>
+  <form class="search-form aui">
+      <div class="field-group">
+        <input class="text medium-field" type="text" id="search-query" name="search-query" placeholder="Rechercher dans l'historique">
+      </div>
   </form>
 
   <ul class="search-results"></ul>
@@ -31,7 +32,7 @@
           url: "{{endpoint}}/search",
           headers: { 'authorization': 'JWT ' + token },
           data: {
-            query: $("input[name='search']").val().trim()
+            query: $("input#search-query").val().trim()
           },
           dataType: 'json',
           error: function (jqXHR, status) {
