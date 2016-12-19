@@ -49,6 +49,10 @@ curl -XPUT 'localhost:9200/bigbrother/_mapping/message?pretty' -d'
       "type": "string",
       "analyzer": "whitespace"
     },
+    "username": {
+      "type": "string",
+      "index": "not_analyzed"
+    },
     "message": {
       "type": "string",
       "analyzer": "custom_french"

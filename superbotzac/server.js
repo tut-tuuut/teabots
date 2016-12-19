@@ -274,7 +274,8 @@ app.post('/record',
         index: 'bigbrother',
         type: 'message',
         body: {
-          author: message.from.name,
+          author: message.from['name'],
+          username: message.from['mention_name'],
           message: message.message,
           room: room.name,
           date: message.date
