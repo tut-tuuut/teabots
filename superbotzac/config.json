@@ -1,6 +1,6 @@
 {
-  "endpoint": "http://example.com",
-  "localPort": 4000,
-  "name": "BigBrother",
-  "teabotToken": ""
+  "endpoint": "https://teabots.jops-dev.com/search",
+  "localPort": 4001,
+  "name": "Search",
+  "teabotToken": "9fC63J4b5u1iwv9Mxb690BQtvFzUdWgJmsXg9nLc"
 }
