@@ -1,4 +1,5 @@
 {
   "endpoint": "http://example.com",
-  "name": "BigBrother"
+  "name": "BigBrother",
+  "teabotToken": ""
 }
