@@ -269,7 +269,7 @@ app.post('/record',
     if ((message.message.split(' ').length >= 2) && (message.message.indexOf('/') !== 0)) {
       // record message
       esClient.index({
-        index: 'messages',
+        index: 'bigbrother',
         type: 'message',
         body: {
           author: message.from.name,
