@@ -18,8 +18,8 @@
       ]
     },
     "installable": {
-      "allowGlobal": true,
-      "allowRoom": false,
+      "allowGlobal": false,
+      "allowRoom": true,
       "callbackUrl": "${host}/installed",
       "uninstalledUrl": "${host}/uninstalled"
     },

@@ -73,7 +73,6 @@ app.post('/installed', function (req, res) {
 
   var installation = req.body;
   var oauthId = installation['oauthId'];
-  store.addInstallation(installation);
 
   // Retrieve the capabilities document
   var capabilitiesUrl = installation['capabilitiesUrl'];
@@ -86,6 +85,8 @@ app.post('/installed', function (req, res) {
 
     // Save the API endpoint URL along with the client credentials
     installation.apiUrl = capabilities['capabilities']['hipchatApiProvider']['url'];
+
+    store.addInstallation(installation);
 
     res.sendStatus(200);
   });
