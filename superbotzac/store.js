@@ -29,6 +29,17 @@ function createInStore(key, value) {
   });
 }
 
+function updateStore(key, value) {
+  return new Promise((resolve, reject) => {
+    memcached.replace(key, value, 0, err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(value);
+    })
+  });
+}
+
 function createInstallationStore() {
   return createInStore(INSTALLATION_STORE_KEY, {});
 }
@@ -57,7 +68,10 @@ function getAccessTokenStore() {
 
 module.exports = {
   addInstallation(installation) {
-    return getInstallationStore().then(store => store[installation['oauthId']] = installation);
+    return getInstallationStore().then(store => {
+      store[installation['oauthId']] = installation;
+      return updateStore(INSTALLATION_STORE_KEY, store);
+    });
   },
 
   getInstallation(oauthId) {
@@ -67,17 +81,15 @@ module.exports = {
   removeInstallation(installation) {
     return getInstallationStore().then(store => {
       delete store[installation['oauthId']];
-      memcached.replace('INSTALLATION_STORE_KEY', store, 0, err => {
-        if (err) {
-          return Promise.reject(err);
-        }
-        return Promise.resolve();
-      });
+      return updateStore(INSTALLATION_STORE_KEY, store);
     });
   },
 
   addAccessToken(oauthId, token) {
-    return getAccessTokenStore().then(store => store[oauthId] = token);
+    return getAccessTokenStore().then(store => {
+      store[oauthId] = token;
+      return updateStore(ACCESS_TOKEN_STORE_KEY, store);
+    });
   },
 
   getAccessToken(oauthId) {
@@ -87,12 +99,7 @@ module.exports = {
   removeAccessToken(oauthId) {
     return getAccessTokenStore().then(store => {
       delete store[oauthId];
-      memcached.replace('ACCESS_TOKEN_STORE_KEY', store, 0, err => {
-        if (err) {
-          return Promise.reject(err);
-        }
-        return Promise.resolve();
-      });
+      return updateStore(ACCESS_TOKEN_STORE_KEY, store);
     });
   }
 };
