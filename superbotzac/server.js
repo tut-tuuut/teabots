@@ -12,6 +12,7 @@
 
 const esClient = require('./elastic');
 const store = require('./store');
+const config = require('./config.json');
 
 var _ = require('lodash');
 var fs = require('fs');
@@ -35,17 +36,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
  * This add-on's capability descriptor can be found here: /capabilities.json
  * The variable ${host} is substituted based on the base URL of your add-on.
  */
-function substituteHostName(file, req, callback) {
+function substituteVars(file, req, callback) {
   fs.readFile(file, function (err, data) {
     var content = _.template(data, {
-      host: 'http://teabots.jops-dev.com/superbotzac'
+      host: config.endpoint,
+      name: config.name
     });
     callback(content);
   });
 }
 
 function sendDescriptor(file, req, res) {
-  substituteHostName(file, req, function (content) {
+  substituteVars(file, req, function (content) {
     res.set('Content-Type', 'application/json');
     res.send(content);
   });

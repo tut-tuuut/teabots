@@ -1,6 +1,6 @@
 {
-  "name": "BigBrother",
-  "description": "BigBrother Addon",
+  "name": "${name}",
+  "description": "${name} Addon",
   "key": "bigbrother-hipchat-addon",
   "links": {
     "homepage": "${host}",
@@ -12,7 +12,7 @@
   },
   "capabilities": {
     "hipchatApiConsumer": {
-      "fromName": "BigBrother",
+      "fromName": "${name}",
       "scopes": [
         "send_notification"
       ]
