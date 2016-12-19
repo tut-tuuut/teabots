@@ -21,9 +21,9 @@
 <script id="results-template" type="text/x-handlebars-template">
   {{#each results}}
   <li class="search-result">
-    <h1>{{this.title}}</h1>
+    <h1>{{this.author}}</h1>
     <div class="body">
-      {{this.body}}
+      {{this.message}}
     </div>
   </li>
   {{/each}}
@@ -35,10 +35,26 @@
 
     $(".search-form").submit(function (event) {
       event.preventDefault();
-      $('.search-results').html(searchResultsTemplate({
-        results: [{ title: 'Yop yop', body: 'blah bla bla' }]
-      }));
-      //HipChat.chat.appendMessage('Hello world!');
+
+      $.ajax({
+        type: "POST",
+        url: "/search",
+        headers: { 'authorization': 'JWT ' + token },
+        data: {
+          query: $("input[name='search']").val().trim()
+        },
+        dataType: 'json',
+        error: function (jqXHR, status) {
+          alert('fail' + status.code);
+        },
+        success: function (data) {
+          $('.search-results').html(searchResultsTemplate({
+            results: data.map(function (result) {
+              return result['_source'];
+            })
+          }));
+        }
+      });
     });
 
   });
