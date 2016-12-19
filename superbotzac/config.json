@@ -1,5 +1,6 @@
 {
   "endpoint": "http://example.com",
+  "localPort": 4000,
   "name": "BigBrother",
   "teabotToken": ""
 }

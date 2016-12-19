@@ -355,6 +355,6 @@ app.all('*', function (req, res) {
   res.sendStatus(204);
 });
 
-var port = 4001;
+var port = config['localPort'] || 4000;
 app.listen(port);
 logger.info('HipChat sample add-on started: http://localhost:' + port);
