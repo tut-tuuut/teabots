@@ -42,7 +42,7 @@ curl -XPUT 'localhost:9200/bigbrother' -d'
   }
 }'
 
-curl -XPUT 'localhost:9200/bigbrother/_mapping/tweet?pretty' -d'
+curl -XPUT 'localhost:9200/bigbrother/_mapping/message?pretty' -d'
 {
   "properties" : {
     "author": {
