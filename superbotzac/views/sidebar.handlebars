@@ -11,10 +11,8 @@
 <script id="results-template" type="text/x-handlebars-template">
   \{{#each results}}
     <li class="search-result">
-      <h1>\{{this.author}}</h1>
-      <div class="body">
-        \{{this.message}}
-      </div>
+      <div class="search-result-author">\{{this.author}}</div>
+      <div class="search-result-message"><pre>\{{this.message}}</pre></div>
     </li>
   \{{/each}}
 </script>

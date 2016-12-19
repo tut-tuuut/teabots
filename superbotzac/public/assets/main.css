@@ -1,0 +1,25 @@
+.search-form > input {
+    margin: 0;
+    padding: 0.3rem;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.search-result {
+    display: flex;
+    flex-direction: row;
+}
+
+.search-result-author {
+    color: grey;
+    width: 20%;
+}
+
+.search-result-message {
+    font-size: 90%;
+    width: 80%;
+}
