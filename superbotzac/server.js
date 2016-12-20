@@ -19,6 +19,8 @@ const logger = bunyan.createLogger({
   level: 'info'
 });
 
+const HIPCHAT_MESSAGE_DATE_FORMAT = 'DD MMM, HH:mm';
+
 const app = express();
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -318,7 +320,7 @@ app.post('/search',
         .then(response => {
           const messages = response.hits.map(hit => {
             const message = hit._source.message.replace(query, `<span style="color: red">${query}</span>`);
-            const date = moment(hit._source.date).format('[le] dd/MM [à] HH:mm');
+            const date = moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT);
 
             return {
               author: hit._source.author,
@@ -367,7 +369,7 @@ app.get('/sidebar-dialog', function (req, res) {
       endpoint: config.endpoint,
       messages: result.hits.map(hit => {
         const message = hit['_source'];
-        message['date'] = moment(hit['_source']['date']).format('DD MMM, HH:mm');
+        message['date'] = moment(hit['_source']['date']).format(HIPCHAT_MESSAGE_DATE_FORMAT);
         message.highlight = hit['_id'] === messageId;
         return message;
       })
@@ -382,7 +384,7 @@ app.post('/history/search', function (req, res) {
   elastic.globalSearch(search.query, 50).then(result => {
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result.hits.map(hit => {
-      hit['_source']['date'] =  moment(hit['_source']['date']).format('DD MMM, HH:mm');
+      hit['_source']['date'] =  moment(hit['_source']['date']).format(HIPCHAT_MESSAGE_DATE_FORMAT);
       return hit;
     })));
   });
