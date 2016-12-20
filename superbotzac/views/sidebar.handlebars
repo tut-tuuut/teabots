@@ -44,17 +44,15 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
-    const noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
-    const searchResultActionsDropdown = Handlebars.compile($('#search-result-actions-dropdown-template').html().trim());
+    var searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
+    var noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
+    var searchResultActionsDropdown = Handlebars.compile($('#search-result-actions-dropdown-template').html().trim());
 
-    const searchQueryInput = $("input#search-query");
-    const searchResults = $(".search-results");
+    var searchQueryInput = $("input#search-query");
+    var searchResults = $(".search-results");
 
-    const body = $('body');
-    let dropdownMenuDisplayed = false;
-
-    body.click(removeDropdownMenu);
+    var body = $('body');
+    var dropdownMenuDisplayed = false;
 
     function displayResults(results) {
       if (results.length === 0) {
@@ -81,7 +79,7 @@
       }
       event.preventDefault();
 
-      const searchQuery = searchQueryInput.val().trim();
+      var searchQuery = searchQueryInput.val().trim();
       if (searchQuery.length === 0) {
         return;
       }
@@ -108,7 +106,7 @@
           },
           success: function (data) {
             displayResults(data.map(function (result) {
-              const message = result['_source'];
+              var message = result['_source'];
               message.id = result['_id'];
               return message;
             }));
@@ -130,5 +128,7 @@
       }));
       dropdownMenuDisplayed = true;
     }
+
+    body.click(removeDropdownMenu);
   });
 </script>
