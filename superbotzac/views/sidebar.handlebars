@@ -97,7 +97,7 @@
       HipChat.auth.withToken(function (err, token) {
         $.ajax({
           type: "POST",
-          url: "{{endpoint}}/search",
+          url: "{{endpoint}}/history/search",
           headers: { 'authorization': 'JWT ' + token },
           data: { query: searchQuery },
           dataType: 'json',

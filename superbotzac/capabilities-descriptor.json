@@ -31,6 +31,13 @@
         "pattern": ".*",
         "name": "Record",
         "authentication": "jwt"
+      },
+      {
+        "url": "${host}/search",
+        "event": "room_message",
+        "pattern": "/search .*",
+        "name": "Search",
+        "authentication": "jwt"
       }
     ],
     "glance": [

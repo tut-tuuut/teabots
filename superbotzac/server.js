@@ -19,6 +19,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const express = require('express');
 const exphbs  = require('express-handlebars');
+const hbs = exphbs.create();
 const bodyParser = require('body-parser');
 const bunyan = require('bunyan');
 const request = require('request');
@@ -35,6 +36,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+
+let hbsPartials;
+hbs.getPartials().then(partials => hbsPartials = partials);
 
 /**
  * Your add-on exposes a capabilities descriptor , which tells HipChat how the add-on plans to extend it.
@@ -290,16 +294,13 @@ function validateJWT(req, res, next) {
  */
 
 app.post('/record',
-  validateJWT, //will be executed before the function below, to validate the JWT token
+  validateJWT,
   function (req, res) {
-    var oauthId = res.locals.context.oauthId;
-    var message = req.body.item.message;
+    const message = req.body.item.message;
+    const room = req.body.item.room;
 
-    logger.info({ message: message, q: req.query }, req.path);
-
-    var room = req.body.item.room;
-    if ((message.message.split(' ').length >= 2) && (message.message.indexOf('/') !== 0)) {
-      // record message
+    if (!message.message.startsWith('/')) { // not a command
+      // index message
       elastic.saveMessage({
         author: message.from['name'],
         username: message.from['mention_name'],
@@ -307,16 +308,53 @@ app.post('/record',
         room: room.name,
         date: message.date
       });
-    } else if (message.message.startsWith('/search')) {
-      var term = message.message.replace('/search', '').trim();
+    }
 
-      if (term !== '') {
-        elastic.searchTerm(term)
-            .then(content => sendPrivateMessage(oauthId, message.from.id, content));
-      } else {
-        // room message
-        sendMessage(oauthId, room.id, 'Tu peux me demander une recherche en tapant `/search coucou`');
-      }
+    res.sendStatus(204);
+  }
+);
+
+app.post('/search',
+  validateJWT,
+  function (req, res) {
+    const oauthId = res.locals.context.oauthId;
+
+    const message = req.body.item.message;
+    const room = req.body.item.room;
+
+    const term = message.message.replace('/search ', '').trim();
+    if (term !== '') {
+      elastic.globalSearch(term)
+        .then(response => {
+          let content = '';
+          if (response.total === 0) {
+            content = `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
+          } else {
+            const nbResults = resp.total;
+            if (nbResults > 10) {
+               content = `Voici les 10 premiers résultats de votre recherche "${term}" :<br/>`;
+            } else {
+               content = `Voici les ${nbResults} résultats de votre recherche "${term}" :<br/>`;
+            }
+
+            const hits = response.hits.map(hit => {
+              const message = hit._source.message.replace(term, `<b>${term}</b>`);
+              const date = new Date(hit._source.date);
+
+              return hbsPartials['hipchat/message']({
+                author: hit._source.author,
+                username: hit._source.username,
+                date: date.toUTCString(),
+                message: message
+              });
+            });
+            content += `<table><tr>${hits.join('</tr><tr>')}</tr></table>`;
+          }
+          sendPrivateMessage(oauthId, message.from.id, content);
+        });
+    } else {
+      // room message
+      sendMessage(oauthId, room.id, 'Tu peux me demander une recherche en tapant `/search coucou`');
     }
 
     res.sendStatus(204);
@@ -353,7 +391,7 @@ app.get('/sidebar-dialog', function (req, res) {
   });
 });
 
-app.post('/search', function (req, res) {
+app.post('/history/search', function (req, res) {
   const search = req.body;
   logger.info(search, req.path);
 
