@@ -26,6 +26,7 @@
   $(document).ready(function () {
     const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
     const noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
+    const searchQueryInput = $("input#search-query");
 
     function displayResults(results) {
       if (results.length === 0) {
@@ -33,12 +34,12 @@
         return;
       }
       $('.search-results').html(searchResultsTemplate({ results: results }));
+      searchQueryInput.focusout();
     }
 
     $(".search-form").submit(function (event) {
       event.preventDefault();
 
-      const searchQueryInput = $("input#search-query");
       const searchQuery = searchQueryInput.val().trim();
       if (searchQuery.length === 0) {
         return;
@@ -52,7 +53,6 @@
           { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "19 Dec, 09:03" },
           { author: "Olivier Servieres", message: "je déploie tearex", date: "19 Dec, 14:53" }
         ]);
-        searchQueryInput.focusout();
         return;
       }
       HipChat.auth.withToken(function(err, token) {
