@@ -14,6 +14,7 @@ const elastic = require('./elastic');
 const store = require('./store');
 const config = require('./config.json');
 
+const moment = require('moment');
 const _ = require('lodash');
 const fs = require('fs');
 const express = require('express');
@@ -344,8 +345,7 @@ app.post('/search', function (req, res) {
 
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result.hits.map(hit => {
-      const hitDate = new Date(hit.date);
-      hit.date = hitDate.toUTCString();
+      hit.date =  moment(hit.date).format('DD MMM, HH:mm');
       return hit;
     })));
   });
