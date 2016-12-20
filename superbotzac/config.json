@@ -2,5 +2,10 @@
   "endpoint": "https://example.com",
   "localPort": 4000,
   "name": "BigBrother",
-  "teabotToken": ""
+  "teabotToken": "",
+  "jenkins": {
+    "apiUrl": "",
+    "user": "",
+    "token": ""
+  }
 }

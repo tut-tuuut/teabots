@@ -27,6 +27,7 @@ const logger = bunyan.createLogger({
   name: 'search-addon',
   level: 'info'
 });
+const jenkinsClient = require('./jenkins');
 
 const app = express();
 app.use(express.static('public'));
@@ -190,7 +191,8 @@ function getAccessToken(oauthId, callback) {
  * HipChat supports various formats for messages, and here are a few examples:
  */
 
-function sendMessage(oauthId, roomId, message) {
+function sendMessage(oauthId, roomId, message, card = {}) {
+  console.log('--------------', 'Hipchat log', message, card);
   store.getInstallation(oauthId).then(installation => {
     var notificationUrl = installation.apiUrl + 'room/' + roomId + '/notification';
     getAccessToken(oauthId, function (token) {
@@ -199,7 +201,8 @@ function sendMessage(oauthId, roomId, message) {
           bearer: token['access_token']
         },
         json: {
-          message: message
+          message: message,
+          card: card
         }
       }, function (err, response, body) {
         logger.info(err || response.statusCode, notificationUrl);
@@ -290,9 +293,10 @@ function validateJWT(req, res, next) {
  */
 
 app.post('/record',
-  validateJWT, //will be executed before the function below, to validate the JWT token
+  //validateJWT, //will be executed before the function below, to validate the JWT token
   function (req, res) {
-    var oauthId = res.locals.context.oauthId;
+    //var oauthId = res.locals.context.oauthId;
+    var oauthId = null;
     var message = req.body.item.message;
 
     logger.info({ message: message, q: req.query }, req.path);
@@ -317,6 +321,78 @@ app.post('/record',
         // room message
         sendMessage(oauthId, room.id, 'Tu peux me demander une recherche en tapant `/search coucou`');
       }
+    } else if (message.message.startsWith('/jenkins')) {
+        var options = message.message.replace('/jenkins', '').trim().split(' ').filter(item => !!item);
+        var commands = ['status', 'build'];
+
+        if (options.length === 0) {
+          // display help
+          jenkinsClient.getJobs().then(jobs => {
+            jobs = jobs.map(job => job.name);
+            var message = `Usage :<br/>
+/jenkins job_name [command] [--param=value]<br/>
+Availables jobs are : ${jobs.join(', ')}.<br/>
+Availables commands are : ${commands.join(', ')}.
+`;
+              sendMessage(oauthId, room.id, message);
+          }, err => {
+              sendMessage(oauthId, room.id, `An error occured : ${err.message}`);
+          });
+        } else if (options.length === 1) {
+          // show job status if exists
+          var jobName = options[0];
+          jenkinsClient.getJobs().then(jobs => {
+            var job = jobs.find(job => job.name === jobName);
+
+            if (!job) {
+              sendMessage(oauthId, room.id, `Job "${jobName}" not found :(`);
+            } else {
+              jenkinsClient.getJobStatus(job.url).then(job => {
+                sendMessage(oauthId, room.id, `Last build status for "${job.displayName}"`, jenkinsClient.buildCard(job));
+              }, err => {
+                sendMessage(oauthId, room.id, `An error occured : ${err.message}`);
+              });
+            }
+          }, err => {
+              sendMessage(oauthId, room.id, `An error occured : ${err.message}`);
+          });
+        } else if (options.length >= 2) {
+          var [jobName, command] = options;
+          // launch command for job if exists
+          if (!commands.includes(command)) {
+            var message = `Unknown command : "${command}".<br/>
+Availables commands are : ${commands.join(', ')}.
+`;
+            sendMessage(oauthId, room.id, message);
+          }
+
+          jenkinsClient.getJobs().then(jobs => {
+            var job = jobs.find(job => job.name === jobName);
+
+            if (!job) {
+              sendMessage(oauthId, room.id, `Job "${jobName}" not found :(`);
+            } else {
+              if (command === 'status') {
+                  jenkinsClient.getJobStatus(job.url).then(job => {
+                    sendMessage(oauthId, room.id, `Last build status for "${job.displayName}"`, jenkinsClient.buildCard(job));
+                  }, err => {
+                    sendMessage(oauthId, room.id, `An error occured : ${err.message}`);
+                  });
+              } else if (command === 'build') {
+                var params = options.filter(param => param.startsWith('--')).map(param => {
+                  [param, value] = param.replace('--', '').split('=');
+
+                  return {name: param, value};
+                });
+                jenkinsClient.buildJob(job.url, params).then(() => {
+                    sendMessage(oauthId, room.id, `Job launched successfully`);
+                }, err => {
+                    sendMessage(oauthId, room.id, `An error occured : ${err.message}`);
+                });
+              }
+            }
+          });
+        }
     }
 
     res.sendStatus(204);
