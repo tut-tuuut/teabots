@@ -316,16 +316,12 @@ app.post('/search',
     if (term !== '') {
       elastic.globalSearch(term)
         .then(response => {
+          const hitsCount = resp.total;
           let content = '';
-          if (response.total === 0) {
+          if (hitsCount === 0) {
             content = `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
           } else {
-            const nbResults = resp.total;
-            if (nbResults > 10) {
-               content = `Voici les 10 premiers résultats de votre recherche "${term}" :<br/>`;
-            } else {
-               content = `Voici les ${nbResults} résultats de votre recherche "${term}" :<br/>`;
-            }
+            content = `Voici les ${hitsCount > 10 ? '10 premiers' : hitsCount } résultats de votre recherche "${term}" :<br/>`;
 
             const hits = response.hits.map(hit => {
               const message = hit._source.message.replace(term, `<b>${term}</b>`);
