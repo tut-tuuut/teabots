@@ -12,7 +12,7 @@ const esClient = new elasticsearch.Client({
 const INDEX_NAME = 'bigbrother';
 const MESSAGE_TYPE_NAME = 'message';
 
-const DATE_FORMAT = "yyy-MM-dd'T'HH:mm:ss.SSSZ";
+const DATE_FORMAT = "YYYY-MM-DD[T]HH:mm:ss.SSSZ";
 
 module.exports = {
   getMessage(id) {
@@ -66,24 +66,26 @@ module.exports = {
       const messageDate = moment(message['_source']['date']);
       return esClient.search({
         index: INDEX_NAME,
-        query: {
-          "bool": {
-            "must": [
-              {
-                "term": {
-                  "room": message['_source']['room']
-                }
-              },
-              {
-                "range" : {
-                  "date" : {
-                    "gte" : messageDate.subtract(2, 'minutes').format(DATE_FORMAT),
-                    "lt" : messageDate.add(4, 'minutes').format(DATE_FORMAT),
-                    "format": "date_time"
+        body: {
+          query: {
+            "bool": {
+              "must": [
+                {
+                  "term": {
+                    "room": message['_source']['room']
+                  }
+                },
+                {
+                  "range" : {
+                    "date" : {
+                      "gte" : messageDate.subtract(2, 'minutes').format(DATE_FORMAT),
+                      "lt" : messageDate.add(4, 'minutes').format(DATE_FORMAT),
+                      "format": "date_time"
+                    }
                   }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       });
