@@ -107,9 +107,10 @@
             console.error('fail', status);
           },
           success: function (data) {
-            displayResults(data.map(result => {
+            displayResults(data.map(function (result) {
               const message = result['_source'];
               message.id = result['_id'];
+              return message;
             }));
           }
         });
