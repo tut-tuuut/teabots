@@ -1,6 +1,30 @@
-.search-form input {
+.search-form {
+    background-color: #205081;
+    padding: 0.5rem;
+}
+
+.search-form input.search-field {
+    background-color: #1a4067;
+    border: none;
+    color: white;
     margin: 0;
-    padding: 0.3rem;
+    max-width: none;
+    outline: none;
+    padding: 0.3rem 25px 0.3rem 0.5rem;
+    width: 100%;
+}
+
+.search-form:after {
+    color: rgba(255, 255, 255, .6);
+    content: "\f18d";
+    font-family: "Atlassian Icons";
+    font-size: 125%;
+    height: 16px;
+    margin-top: 11px;
+    position: absolute;
+    right: 16px;
+    top: 0;
+    width: 16px;
 }
 
 .search-results {

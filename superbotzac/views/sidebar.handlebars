@@ -1,8 +1,6 @@
 <section id="content" role="main" class="ac-content">
   <form class="search-form aui">
-      <div class="field-group">
-        <input class="text medium-field" type="text" id="search-query" name="search-query" placeholder="Rechercher dans l'historique">
-      </div>
+    <input class="text search-field" type="text" id="search-query" name="search-query" placeholder="Rechercher dans l'historique">
   </form>
 
   <ul class="search-results"></ul>
@@ -21,9 +19,23 @@
   $(document).ready(function () {
     const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
 
+    function displayResults(results) {
+      $('.search-results').html(searchResultsTemplate({ results: results }));
+    }
+
     $(".search-form").submit(function (event) {
       event.preventDefault();
 
+      if (typeof HipChat === 'undefined') {
+        // simulate
+        displayResults([
+          { author: "Olivier Servieres", message: "MERDEUH"},
+          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…" },
+          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?"},
+          { author: "Olivier Servieres", message: "je déploie tearex"}
+        ]);
+        return;
+      }
       HipChat.auth.withToken(function(err, token) {
         $.ajax({
           type: "POST",
@@ -33,16 +45,8 @@
             query: $("input#search-query").val().trim()
           },
           dataType: 'json',
-          error: function (jqXHR, status) {
-            alert('fail' + status.code);
-          },
-          success: function (data) {
-            $('.search-results').html(searchResultsTemplate({
-              results: data.map(function (result) {
-                return result['_source'];
-              })
-            }));
-          }
+          error: (jqXHR, status) => console.error('fail', status),
+          success: data => displayResults(data.map(result => result['_source']))
         });
       });
     });
