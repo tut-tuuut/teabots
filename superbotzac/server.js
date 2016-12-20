@@ -318,12 +318,12 @@ app.post('/search',
         .then(response => {
           const messages = response.hits.map(hit => {
             const message = hit._source.message.replace(query, `<span style="color: red">${query}</span>`);
-            const date = new Date(hit._source.date);
+            const date = moment(hit._source.date).format('[le] dd/MM [à] HH:mm');
 
             return {
               author: hit._source.author,
               username: hit._source.username,
-              date: date.toUTCString(),
+              date: date,
               message: message
             };
           });
