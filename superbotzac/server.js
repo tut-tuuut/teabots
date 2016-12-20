@@ -8,7 +8,7 @@ const moment = require('moment');
 const _ = require('lodash');
 const fs = require('fs');
 const express = require('express');
-const exphbs  = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const hbs = exphbs.create();
 const bodyParser = require('body-parser');
 const bunyan = require('bunyan');
@@ -26,7 +26,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
 let hbsPartials;
@@ -43,7 +43,7 @@ function substituteVars(file, req, callback) {
     var content = _.template(data, {
       host: config.endpoint,
       name: config.name,
-      key: config.name.toLowerCase().replace(' ','')
+      key: config.name.toLowerCase().replace(' ', '')
     });
     callback(content);
   });
@@ -206,22 +206,22 @@ function sendMessage(oauthId, roomId, message) {
 }
 
 function sendPrivateMessage(oauthId, user, message) {
-    store.getInstallation(oauthId).then(installation => {
-        var notificationUrl = installation.apiUrl + 'user/' + user + '/message';
-        request.post(notificationUrl, {
-            auth: {
-                bearer: config.teabotToken
-            },
-            json: {
-              message: message,
-              notify: true,
-              message_format: 'html'
-            }
-        }, function (err, response, body) {
-            logger.info(err || response.statusCode, notificationUrl);
-            logger.info(response);
-        });
+  store.getInstallation(oauthId).then(installation => {
+    var notificationUrl = installation.apiUrl + 'user/' + user + '/message';
+    request.post(notificationUrl, {
+      auth: {
+        bearer: config.teabotToken
+      },
+      json: {
+        message: message,
+        notify: true,
+        message_format: 'html'
+      }
+    }, function (err, response, body) {
+      logger.info(err || response.statusCode, notificationUrl);
+      logger.info(response);
     });
+  });
 }
 
 /**
@@ -331,17 +331,11 @@ app.post('/search',
     if (query !== '') {
       elastic.globalSearch(query)
         .then(response => {
-          const messages = response.hits.map(hit => {
-            const message = highlightSearchTerms(query, hit._source.message);
-            const date = moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT);
-
-            return {
-              author: highlightSearchTerms(query, hit._source.author),
-              username: hit._source.username,
-              date: date,
-              message: message
-            };
-          });
+          const messages = response.hits.map(hit => ({
+            author: highlightSearchTerms(query, hit._source.author),
+            date: moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT),
+            message: highlightSearchTerms(query, hit._source.message)
+          }));
 
           sendPrivateMessage(oauthId, message.from.id, hbsPartials['hipchat/search-response']({
             query: query,
@@ -397,7 +391,7 @@ app.post('/history/search', function (req, res) {
   elastic.globalSearch(search.query, 50).then(result => {
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result.hits.map(hit => {
-      hit['_source']['date'] =  moment(hit['_source']['date']).format(HIPCHAT_MESSAGE_DATE_FORMAT);
+      hit['_source']['date'] = moment(hit['_source']['date']).format(HIPCHAT_MESSAGE_DATE_FORMAT);
       return hit;
     })));
   });
