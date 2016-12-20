@@ -18,25 +18,41 @@
   \{{/each}}
 </script>
 
+<script id="no-results-template" type="text/x-handlebars-template">
+  <li class="search-result">Il n'y aucun message qui correspond à votre recherche.</li>
+</script>
+
 <script type="text/javascript">
   $(document).ready(function () {
     const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
+    const noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
 
     function displayResults(results) {
+      if (results.length === 0) {
+        $('.search-results').html(noResultsTemplate());
+        return;
+      }
       $('.search-results').html(searchResultsTemplate({ results: results }));
     }
 
     $(".search-form").submit(function (event) {
       event.preventDefault();
 
+      const searchQueryInput = $("input#search-query");
+      const searchQuery = searchQueryInput.val().trim();
+      if (searchQuery.length === 0) {
+        return;
+      }
+
       if (typeof HipChat === 'undefined') {
         // simulate
         displayResults([
-          { author: "Olivier Servieres", message: "MERDEUH", date: "14:53" },
-          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…", date: "15:12" },
-          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "09:03" },
-          { author: "Olivier Servieres", message: "je déploie tearex", date: "19/12 14:53" }
+          { author: "Olivier Servieres", message: "MERDEUH", date: "20 Dec, 14:53" },
+          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…", date: "20 Dec, 15:12" },
+          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "19 Dec, 09:03" },
+          { author: "Olivier Servieres", message: "je déploie tearex", date: "19 Dec, 14:53" }
         ]);
+        searchQueryInput.focusout();
         return;
       }
       HipChat.auth.withToken(function(err, token) {
@@ -44,9 +60,7 @@
           type: "POST",
           url: "{{endpoint}}/search",
           headers: { 'authorization': 'JWT ' + token },
-          data: {
-            query: $("input#search-query").val().trim()
-          },
+          data: { query: searchQuery },
           dataType: 'json',
           error: (jqXHR, status) => console.error('fail', status),
           success: data => displayResults(data.map(result => result['_source']))
