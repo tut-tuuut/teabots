@@ -341,7 +341,6 @@ app.get('/sidebar-dialog', function (req, res) {
   const messageId = req.query.id;
 
   elastic.buildDialogFromMessageId(messageId).then(result => {
-    console.log('dialog messages from message ' + messageId, result);
     res.render('dialog', {
       endpoint: config.endpoint,
       messages: result.hits.map(hit => {
@@ -359,8 +358,6 @@ app.post('/search', function (req, res) {
   logger.info(search, req.path);
 
   elastic.globalSearch(search.query, 50).then(result => {
-    console.log('search hits', result);
-
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result.hits.map(hit => {
       hit['_source']['date'] =  moment(hit['_source']['date']).format('DD MMM, HH:mm');
