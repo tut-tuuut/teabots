@@ -340,7 +340,7 @@ app.post('/search', function (req, res) {
   const search = req.body;
   logger.info(search, req.path);
 
-  elastic.globalSearch(search.query).then(result => {
+  elastic.globalSearch(search.query, 50).then(result => {
     console.log('search hits', result);
 
     res.set('Content-Type', 'application/json');

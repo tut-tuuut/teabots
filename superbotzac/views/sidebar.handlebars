@@ -11,7 +11,8 @@
     <li class="search-result">
       <div class="search-result-details">
         <span class="search-result-author">\{{this.author}}</span>
-        <span class="search-result-date">- \{{this.date}}</span>
+        <span class="search-result-date"> - \{{this.date}}</span>
+        <span class="search-result-action">+</span>
       </div>
       <div class="search-result-message">\{{this.message}}</div>
     </li>
@@ -26,15 +27,17 @@
   $(document).ready(function () {
     const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
     const noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
+
     const searchQueryInput = $("input#search-query");
+    const searchResults = $(".search-results");
 
     function displayResults(results) {
       if (results.length === 0) {
-        $('.search-results').html(noResultsTemplate());
+        searchResults.html(noResultsTemplate());
         return;
       }
-      $('.search-results').html(searchResultsTemplate({ results: results }));
-      searchQueryInput.focusout();
+      searchResults.html(searchResultsTemplate({ results: results }));
+      searchResults.focus();
     }
 
     $(".search-form").submit(function (event) {
@@ -59,11 +62,15 @@
         $.ajax({
           type: "POST",
           url: "{{endpoint}}/search",
-          headers: { 'authorization': `JWT ${token}` },
+          headers: { 'authorization': 'JWT ' + token },
           data: { query: searchQuery },
           dataType: 'json',
-          error: (jqXHR, status) => console.error('fail', status),
-          success: data => displayResults(data.map(result => result['_source']))
+          error: function (jqXHR, status) {
+            console.error('fail', status);
+          },
+          success: function (data) {
+            displayResults(data.map(result => result['_source']));
+          }
         });
       });
     });

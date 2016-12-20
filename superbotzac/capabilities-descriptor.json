@@ -37,7 +37,7 @@
       {
         "key": "${key}-glance",
         "name": {
-          "value": "${name} Search"
+          "value": "Recherche"
         },
         "icon": {
           "url": "${host}/assets/icon.jpg",

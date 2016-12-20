@@ -23,11 +23,13 @@ module.exports = {
     });
   },
 
-  globalSearch(query) {
+  globalSearch(query, limit) {
+    limit = limit || 10;
     return new Promise((resolve, reject) => {
       esClient.search({
         index: INDEX_NAME,
-        q: query
+        q: query,
+        size: limit
       }, (error, response) => {
         if (error) {
           return reject(error);
