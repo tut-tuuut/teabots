@@ -1,3 +1,9 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
 .search-form {
     background-color: #205081;
     padding: 0.5rem;
@@ -6,11 +12,16 @@
 .search-form input.search-field {
     background-color: #1a4067;
     border: none;
+    border-radius: 3px;
     color: white;
+    font-size: inherit;
+    height: 2.1em;
+    line-height: 1.4285714285714;
     margin: 0;
     max-width: none;
     outline: none;
     padding: 0.3rem 25px 0.3rem 0.5rem;
+    vertical-align: baseline;
     width: 100%;
 }
 

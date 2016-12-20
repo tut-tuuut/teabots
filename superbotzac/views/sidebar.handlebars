@@ -1,7 +1,7 @@
 <section id="content" role="main" class="ac-content">
-  <form class="search-form aui">
+  <div class="search-form aui">
     <input class="text search-field" type="text" id="search-query" name="search-query" placeholder="Rechercher dans l'historique">
-  </form>
+  </div>
 
   <ul class="search-results"></ul>
 </section>
@@ -40,7 +40,10 @@
       searchResults.focus();
     }
 
-    $(".search-form").submit(function (event) {
+    searchQueryInput.keypress(function(event) {
+      if(event.which !== 13) {
+        return;
+      }
       event.preventDefault();
 
       const searchQuery = searchQueryInput.val().trim();
