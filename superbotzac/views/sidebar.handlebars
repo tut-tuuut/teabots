@@ -33,7 +33,7 @@
         <div role="group">
           <ul role="list">
             <li class="message-full-dialog">
-              <a title="Dialogue" class="" href="\{{endpoint}}/sidebar-dialog?id=\{{id}}">Voir le dialogue complet</a>
+              <a title="Dialogue" class="" href="{{endpoint}}/sidebar-dialog?id=\{{id}}">Voir le dialogue complet</a>
             </li>
           </ul>
         </div>
@@ -54,7 +54,7 @@
     const body = $('body');
     let dropdownMenuDisplayed = false;
 
-    $('body').click(removeDropdownMenu);
+    body.click(removeDropdownMenu);
 
     function displayResults(results) {
       if (results.length === 0) {
