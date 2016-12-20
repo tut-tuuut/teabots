@@ -285,6 +285,19 @@ function validateJWT(req, res, next) {
  * HipChat will POST the message to a URL specified by your descriptor when a specific regex is met.
  */
 
+function highlightSearchTerms(query, message) {
+  var enhancedMessage = message;
+  var searchTerms = query.split(' ');
+  searchTerms.forEach(function (term) {
+    var re = new RegExp(term, "ig");
+    var termResults = re.exec(enhancedMessage);
+    if (termResults && termResults.length > 0) {
+      enhancedMessage = enhancedMessage.replace(re, `<span style="color:red;">${termResults.pop()}</span>`);
+    }
+  });
+  return enhancedMessage;
+}
+
 app.post('/record',
   validateJWT,
   function (req, res) {
@@ -319,11 +332,11 @@ app.post('/search',
       elastic.globalSearch(query)
         .then(response => {
           const messages = response.hits.map(hit => {
-            const message = hit._source.message.replace(query, `<span style="color: red">${query}</span>`);
+            const message = highlightSearchTerms(query, hit._source.message);
             const date = moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT);
 
             return {
-              author: hit._source.author,
+              author: highlightSearchTerms(query, hit._source.author),
               username: hit._source.username,
               date: date,
               message: message
