@@ -6,13 +6,13 @@ const elasticsearch = require('elasticsearch');
 const esClient = new elasticsearch.Client({
   host: 'localhost:9200'
   //host: 'tea-elasticsearch:9200'
-
 });
 
 const INDEX_NAME = 'bigbrother';
 const MESSAGE_TYPE_NAME = 'message';
 
 const DATE_FORMAT = "YYYY-MM-DD[T]HH:mm:ss.SSSZ";
+const DIALOG_RANGE_IN_MINUTES = 3;
 
 module.exports = {
   getMessage(id) {
@@ -78,8 +78,8 @@ module.exports = {
                 {
                   "range" : {
                     "date" : {
-                      "gte" : messageDate.subtract(2, 'minutes').format(DATE_FORMAT),
-                      "lt" : messageDate.add(4, 'minutes').format(DATE_FORMAT),
+                      "gte" : messageDate.subtract(DIALOG_RANGE_IN_MINUTES, 'minutes').format(DATE_FORMAT),
+                      "lt" : messageDate.add(DIALOG_RANGE_IN_MINUTES * 2, 'minutes').format(DATE_FORMAT),
                       "format": "date_time"
                     }
                   }

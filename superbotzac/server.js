@@ -347,12 +347,12 @@ app.get('/sidebar-dialog', function (req, res) {
       messages: result.hits.map(hit => {
         const message = hit['_source'];
         message['date'] = moment(hit['_source']['date']).format('DD MMM, HH:mm');
+        message.highlight = hit['_id'] === messageId;
         return message;
       })
     });
   });
 });
-
 
 app.post('/search', function (req, res) {
   const search = req.body;
@@ -368,6 +368,7 @@ app.post('/search', function (req, res) {
     })));
   });
 });
+
 
 /*
  * Start the add-on
