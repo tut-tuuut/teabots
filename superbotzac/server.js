@@ -339,11 +339,15 @@ app.post('/search', function (req, res) {
   const search = req.body;
   logger.info(search, req.path);
 
-  elastic.globalSearch(search.query).then(hits => {
-    console.log('search hits', hits);
+  elastic.globalSearch(search.query).then(result => {
+    console.log('search hits', result);
 
     res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(hits));
+    res.send(JSON.stringify(result.hits.map(hit => {
+      const hitDate = new Date(hit.date);
+      hit.date = hitDate.toUTCString();
+      return hit;
+    })));
   });
 });
 

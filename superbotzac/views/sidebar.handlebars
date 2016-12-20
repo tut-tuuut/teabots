@@ -9,7 +9,10 @@
 <script id="results-template" type="text/x-handlebars-template">
   \{{#each results}}
     <li class="search-result">
-      <div class="search-result-author">\{{this.author}}</div>
+      <div class="search-result-details">
+        <span class="search-result-author">\{{this.author}}</span>
+        <span class="search-result-date">- \{{this.date}}</span>
+      </div>
       <div class="search-result-message">\{{this.message}}</div>
     </li>
   \{{/each}}
@@ -29,10 +32,10 @@
       if (typeof HipChat === 'undefined') {
         // simulate
         displayResults([
-          { author: "Olivier Servieres", message: "MERDEUH"},
-          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…" },
-          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?"},
-          { author: "Olivier Servieres", message: "je déploie tearex"}
+          { author: "Olivier Servieres", message: "MERDEUH", date: "14:53" },
+          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…", date: "15:12" },
+          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "09:03" },
+          { author: "Olivier Servieres", message: "je déploie tearex", date: "19/12 14:53" }
         ]);
         return;
       }
