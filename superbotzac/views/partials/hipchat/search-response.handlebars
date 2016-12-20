@@ -1,10 +1,11 @@
 {{#if noResult}}
-  Désolé aucun résultat ne correspond à votre recherche <strong>{{query}}</strong>
+  Désolé aucun résultat ne correspond à votre recherche <span style="color: red">{{query}}</span>
 {{else}}
-  Voici les {{messagesCount}} {{#if tooManyResults}}meilleurs {{/if}}résultats de votre recherche <strong>{{query}}</strong> :
+  Voici les {{messagesCount}} {{#if tooManyResults}}meilleurs {{/if}}résultats de votre recherche <span style="color: red">{{query}}</span> :
 {{/if}}
-<br/>
+<br/><br/>
 {{#each messages}}
+<span style="height: 5px;">&nbsp;</span>
 <table>
   <tr>
     <td><span style="font-weight: bold;">{{this.author}}</span> <span style="color: #999999">- {{this.date}}</span></td>
