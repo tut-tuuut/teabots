@@ -336,6 +336,24 @@ app.get('/sidebar', function (req, res) {
   });
 });
 
+app.get('/sidebar-dialog', function (req, res) {
+  logger.info(req.query, req.path);
+  const messageId = req.query.id;
+
+  elastic.buildDialogFromMessageId(messageId).then(result => {
+    console.log('dialog messages from message ' + messageId, result);
+    res.render('dialog', {
+      endpoint: config.endpoint,
+      messages: result.hits.map(hit => {
+        const message = hit['_source'];
+        message['date'] = moment(hit['_source']['date']).format('DD MMM, HH:mm');
+        return message;
+      })
+    });
+  });
+});
+
+
 app.post('/search', function (req, res) {
   const search = req.body;
   logger.info(search, req.path);

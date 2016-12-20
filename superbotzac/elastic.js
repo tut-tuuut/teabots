@@ -39,6 +39,20 @@ module.exports = {
     });
   },
 
+  buildDialogFromMessageId(messageId) {
+    return new Promise((resolve, reject) => {
+      esClient.search({
+        index: INDEX_NAME,
+        q: 'frites'
+      }, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(response.hits);
+      });
+    });
+  },
+
   searchTerm(term) {
     return esClient.search({
       index: INDEX_NAME,

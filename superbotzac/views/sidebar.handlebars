@@ -1,6 +1,7 @@
 <section id="content" role="main" class="ac-content">
   <div class="search-form aui">
-    <input class="text search-field" type="text" id="search-query" name="search-query" placeholder="Rechercher dans l'historique">
+    <input class="text search-field" type="text" id="search-query" name="search-query"
+           placeholder="Rechercher dans l'historique">
   </div>
 
   <ul class="search-results"></ul>
@@ -8,14 +9,16 @@
 
 <script id="results-template" type="text/x-handlebars-template">
   \{{#each results}}
-    <li class="search-result">
-      <div class="search-result-details">
-        <span class="search-result-author">\{{this.author}}</span>
-        <span class="search-result-date"> - \{{this.date}}</span>
-        <span class="search-result-action">+</span>
-      </div>
-      <div class="search-result-message">\{{this.message}}</div>
-    </li>
+  <li class="search-result">
+    <div class="search-result-details">
+      <span class="search-result-author">\{{this.author}}</span>
+      <span class="search-result-date"> - \{{this.date}}</span>
+      <button title="" class="search-result-actions aui-button aui-button-light aui-dropdown2-trigger aui-dropdown2-trigger-arrowless" data-id="\{{this.id}}">
+        <span class="aui-icon aui-icon-small aui-iconfont-more">Message actions</span>
+      </button>
+    </div>
+    <div class="search-result-message">\{{this.message}}</div>
+  </li>
   \{{/each}}
 </script>
 
@@ -23,13 +26,35 @@
   <li class="search-result">Il n'y aucun message qui correspond à votre recherche.</li>
 </script>
 
+<script id="search-result-actions-dropdown-template" type="text/x-handlebars-template">
+  <div id="search-result-actions-dropdown" class="aui-dropdown2-in-header aui-dropdown2 aui-style-default aui-dropdown2-in-buttons" style="right: \{{right}}px; top: \{{top}}px; min-width: 160px; display: block;">
+    <div role="application" class="groupchat-room-dropdown">
+      <div role="presentation" class="aui-dropdown2-section">
+        <div role="group">
+          <ul role="list">
+            <li class="message-full-dialog">
+              <a title="Dialogue" class="" href="\{{endpoint}}/sidebar-dialog?id=\{{id}}">Voir le dialogue complet</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/javascript">
   $(document).ready(function () {
     const searchResultsTemplate = Handlebars.compile($('#results-template').html().trim());
     const noResultsTemplate = Handlebars.compile($('#no-results-template').html().trim());
+    const searchResultActionsDropdown = Handlebars.compile($('#search-result-actions-dropdown-template').html().trim());
 
     const searchQueryInput = $("input#search-query");
     const searchResults = $(".search-results");
+
+    const body = $('body');
+    let dropdownMenuDisplayed = false;
+
+    $('body').click(removeDropdownMenu);
 
     function displayResults(results) {
       if (results.length === 0) {
@@ -38,10 +63,20 @@
       }
       searchResults.html(searchResultsTemplate({ results: results }));
       searchResults.focus();
+
+      $('.search-result-actions').click(function (event) {
+        event.stopImmediatePropagation();
+        if (dropdownMenuDisplayed === true) {
+          removeDropdownMenu();
+          return;
+        }
+
+        displayDropdownMenu(event);
+      });
     }
 
-    searchQueryInput.keypress(function(event) {
-      if(event.which !== 13) {
+    searchQueryInput.keypress(function (event) {
+      if (event.which !== 13) {
         return;
       }
       event.preventDefault();
@@ -54,14 +89,14 @@
       if (typeof HipChat === 'undefined') {
         // simulate
         displayResults([
-          { author: "Olivier Servieres", message: "MERDEUH", date: "20 Dec, 14:53" },
-          { author: "Guillaume Charmetant", message: "C'est pas le champ à utiliser mais bon…", date: "20 Dec, 15:12" },
-          { author: "Guillaume Charmetant", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "19 Dec, 09:03" },
-          { author: "Olivier Servieres", message: "je déploie tearex", date: "19 Dec, 14:53" }
+          { id: 1, author: "Olivier Servieres", room: "Dev", message: "MERDEUH", date: "20 Dec, 14:53" },
+          { id: 2, author: "Guillaume Charmetant", room: "Dev", message: "C'est pas le champ à utiliser mais bon…", date: "20 Dec, 15:12" },
+          { id: 3, author: "Guillaume Charmetant", room: "Dev", message: "Ça vaut le coup de regarder si c'est pas ce qu'ils ont fait, non ?", date: "19 Dec, 09:03" },
+          { id: 4, author: "Olivier Servieres", room: "Dev", message: "je déploie tearex", date: "19 Dec, 14:53" }
         ]);
         return;
       }
-      HipChat.auth.withToken(function(err, token) {
+      HipChat.auth.withToken(function (err, token) {
         $.ajax({
           type: "POST",
           url: "{{endpoint}}/search",
@@ -72,11 +107,27 @@
             console.error('fail', status);
           },
           success: function (data) {
-            displayResults(data.map(result => result['_source']));
+            displayResults(data.map(result => {
+              const message = result['_source'];
+              message.id = result['_id'];
+            }));
           }
         });
       });
     });
 
+    function removeDropdownMenu() {
+      $('#search-result-actions-dropdown').remove();
+      dropdownMenuDisplayed = false;
+    }
+
+    function displayDropdownMenu(event) {
+      body.append(searchResultActionsDropdown({
+        id: $(event.currentTarget).data('id'),
+        right: body.width() - event.currentTarget.offsetLeft - event.currentTarget.clientWidth - 4,
+        top: event.currentTarget.offsetTop + 26
+      }));
+      dropdownMenuDisplayed = true;
+    }
   });
 </script>
