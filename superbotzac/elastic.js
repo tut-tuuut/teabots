@@ -12,6 +12,8 @@ const esClient = new elasticsearch.Client({
 const INDEX_NAME = 'bigbrother';
 const MESSAGE_TYPE_NAME = 'message';
 
+const DATE_FORMAT = "yyy-MM-dd'T'HH:mm:ss.SSSZ";
+
 module.exports = {
   getMessage(id) {
     return new Promise((resolve, reject) => {
@@ -23,7 +25,6 @@ module.exports = {
         if (error) {
           return reject(error);
         }
-        res['_source']['date'] = "2016-12-20T13:14:36.629890+00:00";
         resolve(res);
       });
     });
@@ -62,7 +63,7 @@ module.exports = {
 
   buildDialogFromMessageId(messageId) {
     return this.getMessage(messageId).then(message => {
-      const messageDate = moment(message.date);
+      const messageDate = moment(message['_source']['date']);
       return esClient.search({
         index: INDEX_NAME,
         query: {
@@ -70,14 +71,14 @@ module.exports = {
             "must": [
               {
                 "term": {
-                  "room": message.room
+                  "room": message['_source']['room']
                 }
               },
               {
                 "range" : {
                   "date" : {
-                    "gte" : messageDate.subtract(2, 'minutes').toISOString(),
-                    "lt" : messageDate.add(4, 'minutes').toISOString(),
+                    "gte" : messageDate.subtract(2, 'minutes').format(DATE_FORMAT),
+                    "lt" : messageDate.add(4, 'minutes').format(DATE_FORMAT),
                     "format": "date_time"
                   }
                 }
