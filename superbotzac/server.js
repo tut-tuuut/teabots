@@ -345,7 +345,7 @@ app.post('/search', function (req, res) {
 
     res.set('Content-Type', 'application/json');
     res.send(JSON.stringify(result.hits.map(hit => {
-      hit.date =  moment(hit.date).format('DD MMM, HH:mm');
+      hit['_source']['date'] =  moment(hit['_source']['date']).format('DD MMM, HH:mm');
       return hit;
     })));
   });
