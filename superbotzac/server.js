@@ -1,14 +1,4 @@
-/**
- * This HipChat add-on implementation shows you the basic interactions between HipChat and your add-on, including:
- * What happens when a user installs your add-on
- * How you generate API access tokens
- * How you make REST calls to the HipChat API
- * How you implement Webhooks to listen to messages sent by users
- * How you add HipChat Glances and Views to extend the HipChat UI
- *
- * Before you start, you should read the HipChat API getting started guide: https://developer.atlassian.com/hipchat
- * The comprehensive HipChat API reference can be found here: https://www.hipchat.com/docs/apiv2
- */
+"use strict";
 
 const elastic = require('./elastic');
 const store = require('./store');
