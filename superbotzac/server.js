@@ -316,7 +316,7 @@ app.post('/search',
     if (term !== '') {
       elastic.globalSearch(term)
         .then(response => {
-          const hitsCount = resp.total;
+          const hitsCount = response.total;
           let content = '';
           if (hitsCount === 0) {
             content = `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
