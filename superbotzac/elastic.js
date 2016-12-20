@@ -1,18 +1,39 @@
 "use strict";
 
+const moment = require('moment');
 const elasticsearch = require('elasticsearch');
+
 const esClient = new elasticsearch.Client({
   host: 'localhost:9200'
+  //host: 'tea-elasticsearch:9200'
+
 });
 
 const INDEX_NAME = 'bigbrother';
+const MESSAGE_TYPE_NAME = 'message';
 
 module.exports = {
+  getMessage(id) {
+    return new Promise((resolve, reject) => {
+      esClient.get({
+        index: INDEX_NAME,
+        type: MESSAGE_TYPE_NAME,
+        id: id
+      }, function (error, res) {
+        if (error) {
+          return reject(error);
+        }
+        res['_source']['date'] = "2016-12-20T13:14:36.629890+00:00";
+        resolve(res);
+      });
+    });
+  },
+
   saveMessage(message) {
     return new Promise((resolve, reject) => {
       esClient.index({
         index: INDEX_NAME,
-        type: 'message',
+        type: MESSAGE_TYPE_NAME,
         body: message
       }, (error, response) => {
         if (error) {
@@ -40,17 +61,32 @@ module.exports = {
   },
 
   buildDialogFromMessageId(messageId) {
-    return new Promise((resolve, reject) => {
-      esClient.search({
+    return this.getMessage(messageId).then(message => {
+      const messageDate = moment(message.date);
+      return esClient.search({
         index: INDEX_NAME,
-        q: 'frites'
-      }, (error, response) => {
-        if (error) {
-          return reject(error);
+        query: {
+          "bool": {
+            "must": [
+              {
+                "term": {
+                  "room": message.room
+                }
+              },
+              {
+                "range" : {
+                  "date" : {
+                    "gte" : messageDate.subtract(2, 'minutes').toISOString(),
+                    "lt" : messageDate.add(4, 'minutes').toISOString(),
+                    "format": "date_time"
+                  }
+                }
+              }
+            ]
+          }
         }
-        resolve(response.hits);
       });
-    });
+    }).then(results => results.hits);
   },
 
   searchTerm(term) {
