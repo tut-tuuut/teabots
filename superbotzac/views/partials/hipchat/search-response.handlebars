@@ -1,0 +1,14 @@
+{{#if noResult}}
+  Désolé aucun résultat ne correspond à votre recherche "{{query}}"
+{{else}}
+  Voici les {{messagesCount}} résultats de votre recherche "{{query}}" :
+{{/if}}
+<table>
+  {{#each messages}}
+  <tr>
+    <td>{{this.author}} <i>(@{{this.username}})</i></td>
+    <td>{{this.date}}</td>
+    <td>{{this.message}}</td>
+  </tr>
+  {{/each}}
+</table>

@@ -312,31 +312,28 @@ app.post('/search',
     const message = req.body.item.message;
     const room = req.body.item.room;
 
-    const term = message.message.replace('/search ', '').trim();
-    if (term !== '') {
-      elastic.globalSearch(term)
+    const query = message.message.replace('/search ', '').trim();
+    if (query !== '') {
+      elastic.globalSearch(query)
         .then(response => {
-          const hitsCount = response.total;
-          let content = '';
-          if (hitsCount === 0) {
-            content = `Désolé aucun résultat ne correspond à votre recherche "${term}"`;
-          } else {
-            content = `Voici les ${hitsCount > 10 ? '10 premiers' : hitsCount } résultats de votre recherche "${term}" :<br/>`;
+          const messages = response.hits.map(hit => {
+            const message = hit._source.message.replace(query, `<b>${query}</b>`);
+            const date = new Date(hit._source.date);
 
-            const hits = response.hits.map(hit => {
-              const message = hit._source.message.replace(term, `<b>${term}</b>`);
-              const date = new Date(hit._source.date);
+            return {
+              author: hit._source.author,
+              username: hit._source.username,
+              date: date.toUTCString(),
+              message: message
+            };
+          });
 
-              return hbsPartials['hipchat/message']({
-                author: hit._source.author,
-                username: hit._source.username,
-                date: date.toUTCString(),
-                message: message
-              });
-            });
-            content += `<table><tr>${hits.join('</tr><tr>')}</tr></table>`;
-          }
-          sendPrivateMessage(oauthId, message.from.id, content);
+          sendPrivateMessage(oauthId, message.from.id, hbsPartials['hipchat/search-response']({
+            query: query,
+            messages: messages,
+            messagesCount: response.total,
+            noResult: response.total === 0
+          }));
         });
     } else {
       // room message
