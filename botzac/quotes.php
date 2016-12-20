@@ -34,4 +34,5 @@ $quotes = [
     "Là on va ouvrir les entrailles d'un #ePub",
     "Plus on est près, moins on est loin.",
     "Vous faites des trucs d'ambitieux hein, pas des trucs de touche pipi.",
+    "Tu seras béni sur sept générations.",
 ];
