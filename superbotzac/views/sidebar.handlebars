@@ -59,7 +59,7 @@
         $.ajax({
           type: "POST",
           url: "{{endpoint}}/search",
-          headers: { 'authorization': 'JWT ' + token },
+          headers: { 'authorization': `JWT ${token}` },
           data: { query: searchQuery },
           dataType: 'json',
           error: (jqXHR, status) => console.error('fail', status),
