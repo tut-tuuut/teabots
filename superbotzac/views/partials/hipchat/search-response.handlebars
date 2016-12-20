@@ -1,7 +1,7 @@
 {{#if noResult}}
-  Désolé aucun résultat ne correspond à votre recherche "{{query}}"
+  Désolé aucun résultat ne correspond à votre recherche <strong>{{query}}</strong>
 {{else}}
-  Voici les {{messagesCount}} résultats de votre recherche "{{query}}" :
+  Voici les {{messagesCount}} {{#if tooManyResults}}meilleurs {{/if}}résultats de votre recherche <strong>{{query}}</strong> :
 {{/if}}
 <table>
   {{#each messages}}

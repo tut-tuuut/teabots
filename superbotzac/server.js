@@ -317,7 +317,7 @@ app.post('/search',
       elastic.globalSearch(query)
         .then(response => {
           const messages = response.hits.map(hit => {
-            const message = hit._source.message.replace(query, `<b>${query}</b>`);
+            const message = hit._source.message.replace(query, `<strong>${query}</strong>`);
             const date = new Date(hit._source.date);
 
             return {
@@ -331,7 +331,8 @@ app.post('/search',
           sendPrivateMessage(oauthId, message.from.id, hbsPartials['hipchat/search-response']({
             query: query,
             messages: messages,
-            messagesCount: response.total,
+            messagesCount: messages.length,
+            tooManyResults: response.total > messages.length,
             noResult: response.total === 0
           }));
         });
