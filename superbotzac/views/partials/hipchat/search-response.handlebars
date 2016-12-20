@@ -3,12 +3,16 @@
 {{else}}
   Voici les {{messagesCount}} {{#if tooManyResults}}meilleurs {{/if}}résultats de votre recherche <strong>{{query}}</strong> :
 {{/if}}
+{{#each messages}}
+<br/>
+<br/>
 <table>
-  {{#each messages}}
   <tr>
-    <td>{{this.author}} <i>(@{{this.username}})</i></td>
+    <td><span style="width: 70%; font-weight: bold;">{{this.author}}</span> <i>(@{{this.username}})</i></td>
     <td>{{this.date}}</td>
-    <td>{{this.message}}</td>
   </tr>
-  {{/each}}
+  <tr>
+    <td colspan="2">{{{this.message}}}</td>
+  </tr>
 </table>
+{{/each}}

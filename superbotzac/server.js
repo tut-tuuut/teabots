@@ -317,7 +317,7 @@ app.post('/search',
       elastic.globalSearch(query)
         .then(response => {
           const messages = response.hits.map(hit => {
-            const message = hit._source.message.replace(query, `<strong>${query}</strong>`);
+            const message = hit._source.message.replace(query, `<span style="color: red">${query}</span>`);
             const date = new Date(hit._source.date);
 
             return {
