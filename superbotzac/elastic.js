@@ -67,7 +67,7 @@ module.exports = {
       return esClient.search({
         index: INDEX_NAME,
         body: {
-          query: {
+          "query": {
             "bool": {
               "must": [
                 {
@@ -86,7 +86,8 @@ module.exports = {
                 }
               ]
             }
-          }
+          },
+          "sort": { "date": { "order": "asc" } }
         }
       });
     }).then(results => results.hits);
