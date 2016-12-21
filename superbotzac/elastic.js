@@ -101,6 +101,14 @@ module.exports = {
       "type": MESSAGE_TYPE_NAME,
       "body": {
         "size": 0,
+        "query": {
+          "range" : {
+            "date": {
+              "gte": "now-1M/d",
+              "lt": "now"
+            }
+          }
+        },
         "aggs": {
           "top-chatters": {
             "terms": {
