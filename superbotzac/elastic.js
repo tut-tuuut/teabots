@@ -104,7 +104,7 @@ module.exports = {
         "aggs": {
           "top-chatters": {
             "terms": {
-              "field": "author"
+              "field": "username"
             }
           }
         }
