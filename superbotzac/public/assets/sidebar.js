@@ -146,7 +146,7 @@ $(document).ready(function () {
         success: function (topChatters) {
           const topUser = topChatters.shift();
           footer.html(topUserTemplate(topUser));
-          window.setTimeout(displayTopChatters(), 60 * 60 * 1000); // every 60 minutes
+          window.setTimeout(displayTopChatters, 30 * 60 * 1000); // every 30 minutes
         }
       });
     });
