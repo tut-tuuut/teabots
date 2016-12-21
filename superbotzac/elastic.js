@@ -94,7 +94,7 @@ module.exports = {
               "must": [
                 {
                   "term": {
-                    "room": message['_source']['room']
+                    "room.raw": message['_source']['room']
                   }
                 },
                 {

@@ -73,7 +73,10 @@ curl -XPUT 'localhost:9200/bigbrother/_mapping/message?pretty' -d'
     },
     "room": {
       "type": "string",
-      "analyzer": "room_names"
+      "analyzer": "room_names",
+      "fields": {
+        "raw": { "type": "string", "index": "not_analyzed" }
+      }
     },
     "date": {
       "type": "date",
