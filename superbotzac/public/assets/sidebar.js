@@ -79,7 +79,7 @@ $(document).ready(function () {
     HipChat.auth.withToken(function (err, token) {
       $.ajax({
         type: "POST",
-        url: "{{endpoint}}/history/search",
+        url: window.teabot.endpoint + "/history/search",
         headers: { 'authorization': 'JWT ' + token },
         data: { query: searchQuery },
         dataType: 'json',
@@ -132,7 +132,7 @@ $(document).ready(function () {
   HipChat.auth.withToken(function (err, token) {
     $.ajax({
       type: "GET",
-      url: "{{endpoint}}/history/topChatters",
+      url: window.teabot.endpoint + "/history/topChatters",
       headers: { 'authorization': 'JWT ' + token },
       dataType: 'json',
       error: function (jqXHR, status) {
