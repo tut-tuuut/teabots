@@ -132,7 +132,8 @@ $(document).ready(function () {
   footer.click(function () {
     window.location.assign(window.teabot.endpoint + '/sidebar-top-chatters');
   });
-  window.setInterval(function () {
+
+  function displayTopChatters() {
     HipChat.auth.withToken(function (err, token) {
       $.ajax({
         type: "GET",
@@ -145,8 +146,11 @@ $(document).ready(function () {
         success: function (topChatters) {
           const topUser = topChatters.shift();
           footer.html(topUserTemplate(topUser));
+          window.setTimeout(displayTopChatters(), 60 * 60 * 1000); // every 60 minutes
         }
       });
     });
-  }, 60 * 60 * 1000); // every 60 minutes
+  }
+
+  displayTopChatters();
 });

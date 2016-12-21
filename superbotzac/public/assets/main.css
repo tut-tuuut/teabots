@@ -137,6 +137,7 @@ footer {
     background-color: #205081;
     bottom: 0;
     color: #fff;
+    cursor: pointer;
     display: flex;
     height: 3rem;
     justify-content: center;
