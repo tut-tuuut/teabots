@@ -141,15 +141,5 @@ module.exports = {
       const buckets = response.aggregations['top-chatters'].buckets;
       return buckets.map(bucket => ({ username: bucket['key'], total: bucket['doc_count'] }));
     });
-  },
-
-  dump() {
-    return esClient.search({
-      "index": INDEX_NAME,
-      "type": MESSAGE_TYPE_NAME,
-      "body": {
-        "size": 100000000
-      }
-    }).then(results => console.log(results.hits.hits.map(hit => hit['_source'])));
   }
 };
