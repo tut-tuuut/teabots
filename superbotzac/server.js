@@ -384,6 +384,12 @@ app.get('/sidebar-dialog', function (req, res) {
   });
 });
 
+
+/*
+ * HipChat History endpoint
+ * ------------------------
+ */
+
 app.post('/history/search', function (req, res) {
   const search = req.body;
   logger.info(search, req.path);
@@ -394,6 +400,13 @@ app.post('/history/search', function (req, res) {
       hit['_source']['date'] = moment(hit['_source']['date']).format(HIPCHAT_MESSAGE_DATE_FORMAT);
       return hit;
     })));
+  });
+});
+
+app.get('/history/topChatters', function (req, res) {
+  elastic.getTopChattersOfMonth().then(topChatters => {
+    res.set('Content-Type', 'application/json');
+    res.send(JSON.stringify(topChatters));
   });
 });
 

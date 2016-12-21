@@ -92,3 +92,15 @@
 .back-to-search a {
     color: white;
 }
+
+footer {
+    align-items: center;
+    background-color: #205081;
+    bottom: 0;
+    color: #fff;
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+}

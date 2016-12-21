@@ -18,9 +18,9 @@ module.exports = {
   getMessage(id) {
     return new Promise((resolve, reject) => {
       esClient.get({
-        index: INDEX_NAME,
-        type: MESSAGE_TYPE_NAME,
-        id: id
+        "index": INDEX_NAME,
+        "type": MESSAGE_TYPE_NAME,
+        "id": id
       }, function (error, res) {
         if (error) {
           return reject(error);
@@ -33,9 +33,9 @@ module.exports = {
   saveMessage(message) {
     return new Promise((resolve, reject) => {
       esClient.index({
-        index: INDEX_NAME,
-        type: MESSAGE_TYPE_NAME,
-        body: message
+        "index": INDEX_NAME,
+        "type": MESSAGE_TYPE_NAME,
+        "body": message
       }, (error, response) => {
         if (error) {
           return reject(error);
@@ -49,9 +49,10 @@ module.exports = {
     limit = limit || 10;
     return new Promise((resolve, reject) => {
       esClient.search({
-        index: INDEX_NAME,
-        q: query,
-        size: limit
+        "index": INDEX_NAME,
+        "type": MESSAGE_TYPE_NAME,
+        "q": query,
+        "size": limit
       }, (error, response) => {
         if (error) {
           return reject(error);
@@ -65,8 +66,9 @@ module.exports = {
     return this.getMessage(messageId).then(message => {
       const messageDate = moment(message['_source']['date']);
       return esClient.search({
-        index: INDEX_NAME,
-        body: {
+        "index": INDEX_NAME,
+        "type": MESSAGE_TYPE_NAME,
+        "body": {
           "query": {
             "bool": {
               "must": [
@@ -91,5 +93,25 @@ module.exports = {
         }
       });
     }).then(results => results.hits);
+  },
+
+  getTopChattersOfMonth() {
+    return esClient.search({
+      "index": INDEX_NAME,
+      "type": MESSAGE_TYPE_NAME,
+      "body": {
+        "size": 0,
+        "aggs": {
+          "top-chatters": {
+            "terms": {
+              "field": "author"
+            }
+          }
+        }
+      }
+    }).then(response => {
+      const buckets = response.aggregations['top-chatters'].buckets;
+      return buckets.map(bucket => ({ username: bucket['key'], total: bucket['doc_count'] }));
+    });
   }
 };
