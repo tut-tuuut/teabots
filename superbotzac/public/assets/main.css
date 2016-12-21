@@ -4,6 +4,12 @@
     -webkit-box-sizing: border-box;
 }
 
+.teabot-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .search-form {
     background-color: #205081;
     padding: 0.5rem;
@@ -43,14 +49,16 @@
     flex-direction: column;
     list-style: none;
     margin: 0;
+    overflow-y: auto;
     padding: 0;
 }
 
 .search-result {
-    display: flex;
-    flex-direction: column;
     background-color: white;
     border-bottom: 1px solid #cacaca;
+    display: flex;
+    flex-direction: column;
+    min-height: 4rem;
     padding: 0.5rem;
 }
 
@@ -96,12 +104,11 @@
 footer {
     align-items: center;
     background-color: #205081;
-    bottom: 0;
     color: #fff;
     display: flex;
     height: 3rem;
     justify-content: center;
+    margin-top: auto;
     padding: 0.5rem;
-    position: fixed;
     width: 100%;
 }
