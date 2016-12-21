@@ -35,7 +35,7 @@
       {
         "url": "${host}/search",
         "event": "room_message",
-        "pattern": "/search .*",
+        "pattern": "/search.*",
         "name": "Search",
         "authentication": "jwt"
       }
