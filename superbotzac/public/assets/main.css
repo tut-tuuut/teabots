@@ -4,12 +4,6 @@
     -webkit-box-sizing: border-box;
 }
 
-.teabot-sidebar {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
 .search-form {
     background-color: #205081;
     padding: 0.5rem;
@@ -50,7 +44,7 @@
     list-style: none;
     margin: 0;
     overflow-y: auto;
-    padding: 0;
+    padding: 0 0 3rem 0;
 }
 
 .search-result {
@@ -104,11 +98,12 @@
 footer {
     align-items: center;
     background-color: #205081;
+    bottom: 0;
     color: #fff;
     display: flex;
     height: 3rem;
     justify-content: center;
-    margin-top: auto;
     padding: 0.5rem;
+    position: fixed;
     width: 100%;
 }
