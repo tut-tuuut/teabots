@@ -51,7 +51,27 @@ module.exports = {
       esClient.search({
         "index": INDEX_NAME,
         "type": MESSAGE_TYPE_NAME,
-        "q": query,
+        "body": {
+          "query": {
+            "bool": {
+              "should" : [
+                {
+                  "match" : { "message" : query }
+                },
+                {
+                  "match" : { "author" : query }
+                },
+                {
+                  "match" : { "username" : query }
+                },
+                {
+                  "match" : { "room" : query }
+                }
+              ],
+              "minimum_should_match" : 1
+            }
+          }
+        },
         "size": limit
       }, (error, response) => {
         if (error) {
@@ -121,5 +141,15 @@ module.exports = {
       const buckets = response.aggregations['top-chatters'].buckets;
       return buckets.map(bucket => ({ username: bucket['key'], total: bucket['doc_count'] }));
     });
+  },
+
+  dump() {
+    return esClient.search({
+      "index": INDEX_NAME,
+      "type": MESSAGE_TYPE_NAME,
+      "body": {
+        "size": 100000000
+      }
+    }).then(results => console.log(results.hits.hits.map(hit => hit['_source'])));
   }
 };

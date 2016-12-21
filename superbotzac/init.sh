@@ -29,13 +29,25 @@ curl -XPUT 'localhost:9200/bigbrother' -d'
       },
       "analyzer": {
         "custom_french": {
-          "tokenizer":  "standard",
+          "type": "custom",
+          "tokenizer": "standard",
           "filter": [
+            "asciifolding",
             "french_elision",
             "lowercase",
             "french_stop",
             "french_stemmer"
           ]
+        },
+        "french_names": {
+          "type": "custom",
+          "tokenizer": "whitespace",
+          "filter": ["lowercase", "asciifolding"]
+        },
+        "room_names": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": ["lowercase", "asciifolding"]
         }
       }
     }
@@ -47,7 +59,8 @@ curl -XPUT 'localhost:9200/bigbrother/_mapping/message?pretty' -d'
   "properties" : {
     "author": {
       "type": "string",
-      "analyzer": "whitespace"
+      "analyzer": "french_names",
+      "boost": 2
     },
     "username": {
       "type": "string",
@@ -55,11 +68,12 @@ curl -XPUT 'localhost:9200/bigbrother/_mapping/message?pretty' -d'
     },
     "message": {
       "type": "string",
-      "analyzer": "custom_french"
+      "analyzer": "custom_french",
+      "boost": 2
     },
     "room": {
       "type": "string",
-      "index": "not_analyzed"
+      "analyzer": "room_names"
     },
     "date": {
       "type": "date",
