@@ -4,6 +4,30 @@
     -webkit-box-sizing: border-box;
 }
 
+.teabot-sidebar-bar {
+    background-color: #205081;
+    color: white;
+    display: flex;
+    padding: 0.7rem;
+}
+
+.teabot-sidebar-title {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.teabot-sidebar-back-button {
+    color: white;
+    font-size: 110%;
+    padding: 0 0.5rem;
+}
+
+.teabot-sidebar-back-button:hover {
+    text-decoration: none;
+    transform: scale(1.2);
+    transition: all .2s ease-in-out;
+}
+
 .search-form {
     background-color: #205081;
     padding: 0.5rem;
@@ -38,7 +62,7 @@
     width: 16px;
 }
 
-.search-results {
+.sidebar-list {
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -86,14 +110,26 @@
     background-color: #fff2cc;
 }
 
-.back-to-search {
-    background-color: #205081;
-    color: white;
-    padding: 0.7rem;
+.top-chatter {
+    background-color: white;
+    border-bottom: 1px solid #cacaca;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem;
 }
 
-.back-to-search a {
-    color: white;
+.top-chatter-name {
+    flex-grow: 1;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+.top-chatter:first-child {
+    background-color: #ffe6a5;
+}
+
+.top-chatter:first-child .top-chatter-name {
+    font-weight: bold;
 }
 
 footer {

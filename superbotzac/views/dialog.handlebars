@@ -1,5 +1,8 @@
 <section id="content" role="main" class="ac-content">
-  <nav class="back-to-search">&lt; <a href="{{endpoint}}/sidebar">Retour à la recherche</a></nav>
+  <nav class="teabot-sidebar-bar">
+    <a href="{{endpoint}}/sidebar" class="teabot-sidebar-back-button">&lt; </a>
+    <span>Retour à la recherche</span>
+  </nav>
   <ul class="search-results">
     {{#each messages}}
     <li class="search-result {{#if this.highlight}}current-message{{/if}}">

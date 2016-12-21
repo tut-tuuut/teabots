@@ -9,7 +9,6 @@ const _ = require('lodash');
 const fs = require('fs');
 const express = require('express');
 const exphbs = require('express-handlebars');
-const hbs = exphbs.create();
 const bodyParser = require('body-parser');
 const bunyan = require('bunyan');
 const request = require('request');
@@ -26,11 +25,24 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+const hbs = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+    inc: function (number, options) {
+      if (typeof(number) === 'undefined' || number === null) {
+        return null;
+      }
+      return number + (options.hash.inc || 1);
+    }
+  }
+});
+
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 let hbsPartials;
 hbs.getPartials().then(partials => hbsPartials = partials);
+
 
 /**
  * Your add-on exposes a capabilities descriptor , which tells HipChat how the add-on plans to extend it.
@@ -380,6 +392,15 @@ app.get('/sidebar-dialog', function (req, res) {
         message.highlight = hit['_id'] === messageId;
         return message;
       })
+    });
+  });
+});
+
+app.get('/sidebar-top-chatters', function (req, res) {
+  elastic.getTopChattersOfMonth().then(users => {
+    res.render('top-chatters', {
+      endpoint: config.endpoint,
+      users: users
     });
   });
 });

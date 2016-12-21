@@ -129,19 +129,24 @@ $(document).ready(function () {
   body.click(removeDropdownMenu);
 
   // display footer
-  HipChat.auth.withToken(function (err, token) {
-    $.ajax({
-      type: "GET",
-      url: window.teabot.endpoint + "/history/topChatters",
-      headers: { 'authorization': 'JWT ' + token },
-      dataType: 'json',
-      error: function (jqXHR, status) {
-        console.error('fail', status);
-      },
-      success: function (topChatters) {
-        const topUser = topChatters.shift();
-        footer.html(topUserTemplate(topUser));
-      }
-    });
+  footer.click(function () {
+    window.location.assign(window.teabot.endpoint + '/sidebar-top-chatters');
   });
+  window.setInterval(function () {
+    HipChat.auth.withToken(function (err, token) {
+      $.ajax({
+        type: "GET",
+        url: window.teabot.endpoint + "/history/topChatters",
+        headers: { 'authorization': 'JWT ' + token },
+        dataType: 'json',
+        error: function (jqXHR, status) {
+          console.error('fail', status);
+        },
+        success: function (topChatters) {
+          const topUser = topChatters.shift();
+          footer.html(topUserTemplate(topUser));
+        }
+      });
+    });
+  }, 60 * 60 * 1000); // every 60 minutes
 });
