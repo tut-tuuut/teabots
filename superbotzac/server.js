@@ -310,6 +310,25 @@ function highlightSearchTerms(query, message) {
   return enhancedMessage;
 }
 
+function globalSearch(query) {
+  return elastic.globalSearch(query)
+    .then(response => {
+      const messages = response.hits.map(hit => ({
+        author: highlightSearchTerms(query, hit._source.author),
+        date: moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT),
+        message: highlightSearchTerms(query, hit._source.message)
+      }));
+
+      return hbsPartials['hipchat/search-response']({
+        query: query,
+        messages: messages,
+        messagesCount: messages.length,
+        tooManyResults: response.total > messages.length,
+        noResult: response.total === 0
+      });
+    });
+}
+
 app.post('/record',
   validateJWT,
   function (req, res) {
@@ -341,30 +360,38 @@ app.post('/search',
 
     const query = message.message.replace('/search ', '').trim();
     if (query !== '') {
-      elastic.globalSearch(query)
-        .then(response => {
-          const messages = response.hits.map(hit => ({
-            author: highlightSearchTerms(query, hit._source.author),
-            date: moment(hit._source.date).format(HIPCHAT_MESSAGE_DATE_FORMAT),
-            message: highlightSearchTerms(query, hit._source.message)
-          }));
-
-          sendPrivateMessage(oauthId, message.from.id, hbsPartials['hipchat/search-response']({
-            query: query,
-            messages: messages,
-            messagesCount: messages.length,
-            tooManyResults: response.total > messages.length,
-            noResult: response.total === 0
-          }));
-        });
+      globalSearch(query).then(message => sendPrivateMessage(oauthId, message.from.id, message));
     } else {
-      // room message
-      sendMessage(oauthId, room.id, 'Tu peux me demander une recherche en tapant `/search coucou`');
+      // room help message
+      const help = '/search <strong>waldo</strong>';
+      sendMessage(oauthId, room.id, help);
     }
 
     res.sendStatus(204);
   }
 );
+
+app.post('/prove',
+  validateJWT,
+  function (req, res) {
+    const oauthId = res.locals.context.oauthId;
+
+    const message = req.body.item.message;
+    const room = req.body.item.room;
+
+    const query = message.message.replace('/prove ', '').trim();
+    if (query !== '') {
+      globalSearch(query).then(message => sendMessage(oauthId, room.id, message));
+    } else {
+      // room help message
+      const help = '/prove <strong>me wrong</strong>';
+      sendMessage(oauthId, room.id, help);
+    }
+
+    res.sendStatus(204);
+  }
+);
+
 
 /*
  * HipChat sidebar View

@@ -38,6 +38,13 @@
         "pattern": "/search.*",
         "name": "Search",
         "authentication": "jwt"
+      },
+      {
+        "url": "${host}/prove",
+        "event": "room_message",
+        "pattern": "/prove.*",
+        "name": "Prove me wrong",
+        "authentication": "jwt"
       }
     ],
     "glance": [
