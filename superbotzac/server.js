@@ -209,7 +209,7 @@ function sendMessage(oauthId, roomId, message) {
         json: {
           message: message
         }
-      }, function (err, response, body) {
+      }, function (err, response) {
         logger.info(err || response.statusCode, notificationUrl);
         logger.info(response);
       });
@@ -217,9 +217,9 @@ function sendMessage(oauthId, roomId, message) {
   });
 }
 
-function sendPrivateMessage(oauthId, user, message) {
+function sendPrivateMessage(oauthId, userId, message) {
   store.getInstallation(oauthId).then(installation => {
-    var notificationUrl = installation.apiUrl + 'user/' + user + '/message';
+    var notificationUrl = installation.apiUrl + 'user/' + userId + '/message';
     request.post(notificationUrl, {
       auth: {
         bearer: config.teabotToken
@@ -229,7 +229,7 @@ function sendPrivateMessage(oauthId, user, message) {
         notify: true,
         message_format: 'html'
       }
-    }, function (err, response, body) {
+    }, function (err, response) {
       logger.info(err || response.statusCode, notificationUrl);
       logger.info(response);
     });
@@ -326,7 +326,8 @@ function globalSearch(query) {
         tooManyResults: response.total > messages.length,
         noResult: response.total === 0
       });
-    });
+    })
+    .catch(error => console.log(error));
 }
 
 app.post('/record',
@@ -358,9 +359,9 @@ app.post('/search',
     const message = req.body.item.message;
     const room = req.body.item.room;
 
-    const query = message.message.replace('/search ', '').trim();
+    const query = message.message.replace('/search', '').trim();
     if (query !== '') {
-      globalSearch(query).then(message => sendPrivateMessage(oauthId, message.from.id, message));
+      globalSearch(query).then(response => sendPrivateMessage(oauthId, message.from.id, response));
     } else {
       // room help message
       const help = '/search <strong>waldo</strong>';
@@ -381,7 +382,7 @@ app.post('/prove',
 
     const query = message.message.replace('/prove ', '').trim();
     if (query !== '') {
-      globalSearch(query).then(message => sendMessage(oauthId, room.id, message));
+      globalSearch(query).then(response => sendMessage(oauthId, room.id, response));
     } else {
       // room help message
       const help = '/prove <strong>me wrong</strong>';
