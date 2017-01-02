@@ -380,7 +380,7 @@ app.post('/prove',
     const message = req.body.item.message;
     const room = req.body.item.room;
 
-    const query = message.message.replace('/prove ', '').trim();
+    const query = message.message.replace('/prove', '').trim();
     if (query !== '') {
       globalSearch(query).then(response => sendMessage(oauthId, room.id, response));
     } else {
