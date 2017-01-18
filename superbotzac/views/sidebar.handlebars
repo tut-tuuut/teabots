@@ -1,0 +1,56 @@
+<section id="content" role="main" class="ac-content teabot-sidebar">
+  <div class="search-form aui">
+    <input class="text search-field" type="text" id="search-query" name="search-query"
+           placeholder="Rechercher dans l'historique">
+  </div>
+
+  <ul class="search-results sidebar-list"></ul>
+</section>
+
+<footer>...</footer>
+
+<script id="results-template" type="text/x-handlebars-template">
+  \{{#each results}}
+  <li class="search-result">
+    <div class="search-result-details">
+      <span class="search-result-author">\{{{this.author}}}</span>
+      <span class="search-result-date"> - \{{this.date}}</span>
+      <button title="" class="search-result-actions aui-button aui-button-light aui-dropdown2-trigger aui-dropdown2-trigger-arrowless" data-id="\{{this.id}}">
+        <span class="aui-icon aui-icon-small aui-iconfont-more"></span>
+      </button>
+    </div>
+    <div class="search-result-message">\{{{this.message}}}</div>
+  </li>
+  \{{/each}}
+</script>
+
+<script id="no-results-template" type="text/x-handlebars-template">
+  <li class="search-result">Il n'y aucun message qui correspond à votre recherche.</li>
+</script>
+
+<script id="search-result-actions-dropdown-template" type="text/x-handlebars-template">
+  <div id="search-result-actions-dropdown" class="aui-dropdown2-in-header aui-dropdown2 aui-style-default aui-dropdown2-in-buttons" style="right: \{{right}}px; top: \{{top}}px; min-width: 160px; display: block;">
+    <div role="application" class="groupchat-room-dropdown">
+      <div role="presentation" class="aui-dropdown2-section">
+        <div role="group">
+          <ul role="list">
+            <li class="message-full-dialog">
+              <a title="Dialogue" class="" href="{{endpoint}}/sidebar-dialog?id=\{{id}}">Voir le dialogue complet</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="top-user-template" type="text/x-handlebars-template">
+  <span>Pipelette du mois : <strong>@\{{username}}</strong> avec <strong>\{{total}}</strong> messages</span>
+</script>
+
+<script type="text/javascript">
+  window.teabot = {
+    endpoint: "{{endpoint}}"
+  };
+</script>
+<script src="assets/sidebar.js"></script>

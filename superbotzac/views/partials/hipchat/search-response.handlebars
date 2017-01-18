@@ -1,0 +1,17 @@
+{{#if noResult}}
+  Désolé aucun résultat ne correspond à votre recherche <span style="color: red">{{query}}</span>
+{{else}}
+  Voici les {{messagesCount}} {{#if tooManyResults}}meilleurs {{/if}}résultats de votre recherche <span style="color: red">{{query}}</span> :
+  <br/>
+  <br/>
+{{/if}}
+{{#each messages}}
+<table>
+  <tr>
+    <td><span style="font-weight: bold;">{{{this.author}}}</span> <span style="color: #999999">- {{this.date}}</span></td>
+  </tr>
+  <tr>
+    <td>{{{this.message}}}</td>
+  </tr>
+</table>
+{{/each}}

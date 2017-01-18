@@ -1,0 +1,78 @@
+{
+  "name": "${name}",
+  "description": "${name} Addon",
+  "key": "${key}-hipchat-addon",
+  "links": {
+    "homepage": "${host}",
+    "self": "${host}/capabilities.json"
+  },
+  "vendor": {
+    "name": "JoPs",
+    "url": "http://www.jops-dev.com/"
+  },
+  "capabilities": {
+    "hipchatApiConsumer": {
+      "fromName": "${name}",
+      "scopes": [
+        "send_notification",
+        "send_message"
+      ]
+    },
+    "installable": {
+      "allowGlobal": true,
+      "allowRoom": true,
+      "callbackUrl": "${host}/installed",
+      "uninstalledUrl": "${host}/uninstalled"
+    },
+    "webhook": [
+      {
+        "url": "${host}/record",
+        "event": "room_message",
+        "pattern": ".*",
+        "name": "Record",
+        "authentication": "jwt"
+      },
+      {
+        "url": "${host}/search",
+        "event": "room_message",
+        "pattern": "/search.*",
+        "name": "Search",
+        "authentication": "jwt"
+      },
+      {
+        "url": "${host}/prove",
+        "event": "room_message",
+        "pattern": "/prove.*",
+        "name": "Prove me wrong",
+        "authentication": "jwt"
+      }
+    ],
+    "glance": [
+      {
+        "key": "${key}-glance",
+        "name": {
+          "value": "Recherche"
+        },
+        "icon": {
+          "url": "${host}/assets/icon.jpg",
+          "url@2x": "${host}/assets/icon.jpg"
+        },
+        "target": "${key}-sidebar"
+      }
+    ],
+    "webPanel": [
+      {
+        "key": "${key}-sidebar",
+        "name": {
+          "value": "${name} Sidebar"
+        },
+        "icon": {
+          "url": "${host}/assets/icon.jpg",
+          "url@2x": "${host}/assets/icon.jpg"
+        },
+        "location": "hipchat.sidebar.right",
+        "url": "${host}/sidebar"
+      }
+    ]
+  }
+}

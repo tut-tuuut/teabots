@@ -1,0 +1,15 @@
+<section id="content" role="main" class="ac-content teabot-sidebar">
+  <nav class="teabot-sidebar-bar">
+    <a href="{{endpoint}}/sidebar" class="teabot-sidebar-back-button">&lt; </a>
+    <span class="teabot-sidebar-title">Pipelettes du mois</span>
+  </nav>
+  <ul class="sidebar-list">
+  {{#each users}}
+    <li class="top-chatter">
+      <span>{{inc @index}}</span>
+      <span class="top-chatter-name">{{this.username}}</span>
+      <span>{{this.total}} messages</span>
+    </li>
+  {{/each}}
+  </ul>
+</section>
