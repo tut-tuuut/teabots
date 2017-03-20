@@ -37,4 +37,5 @@ $quotes = [
     "Tu seras béni sur sept générations.",
     "Il y a peut-être une paille au milieu.",
     "Ha ha ha ha, staging alive, staging alive...",
+    "Dans /dev/null, personne ne vous entend crier.",
 ];
