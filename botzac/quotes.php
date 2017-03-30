@@ -38,4 +38,5 @@ $quotes = [
     "Il y a peut-être une paille au milieu.",
     "Ha ha ha ha, staging alive, staging alive...",
     "Dans /dev/null, personne ne vous entend crier.",
+    "Il y en a qui vendent leur âme au diable, Pascal lui il vend sa RAM à MySQL.",
 ];
