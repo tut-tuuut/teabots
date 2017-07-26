@@ -39,4 +39,5 @@ $quotes = [
     "Ha ha ha ha, staging alive, staging alive...",
     "Dans /dev/null, personne ne vous entend crier.",
     "On les a un peu trop pris pour des allemands.",
+    "Je vous serai donc gré de suivre vos dossiers avant de faire des réponses à l’emporte pièce.",
 ];
