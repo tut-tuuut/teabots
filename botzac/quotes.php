@@ -41,4 +41,5 @@ $quotes = [
     "Il y en a qui vendent leur âme au diable, Pascal lui il vend sa RAM à MySQL.",
     "On les a un peu trop pris pour des allemands.",
     "Je vous serai donc gré de suivre vos dossiers avant de faire des réponses à l’emporte pièce.",
+    "Je suis venu, j'ai vu, et j'ai qu'un seul cul.",
 ];
