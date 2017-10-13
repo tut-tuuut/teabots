@@ -14,7 +14,7 @@ $images = $response['items'];
 
 $response = [
   'color' => 'yellow',
-  'message' => '<img src="' . $images[0]['link'] . '" width="300">',
+  'message' => '<img src="' . $images[0]['link'] . '" width="400">',
   'notify' => false,
   'message_format' => 'html'
 ];
