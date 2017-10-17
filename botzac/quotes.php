@@ -42,5 +42,5 @@ $quotes = [
     "On les a un peu trop pris pour des allemands.",
     "Je vous serai donc gré de suivre vos dossiers avant de faire des réponses à l’emporte pièce.",
     "Je suis venu, j'ai vu, et j'ai qu'un seul cul.",
-    "Si il y en a un qui fait tilt, on prend la motte au cul",
+    "S'il y en a un qui fait tilt, on prend la motte au cul.",
 ];
