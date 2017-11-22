@@ -44,4 +44,5 @@ $quotes = [
     "Je suis venu, j'ai vu, et j'ai qu'un seul cul.",
     "S'il y en a un qui fait tilt, on prend la motte au cul.",
     "Quand je pense qu'on a touché le fond, ils creusent.",
+    "Lui il est capable de grenouiller dans des instances d'actionnaires.",
 ];
