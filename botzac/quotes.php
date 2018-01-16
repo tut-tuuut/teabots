@@ -45,4 +45,5 @@ $quotes = [
     "S'il y en a un qui fait tilt, on prend la motte au cul.",
     "Quand je pense qu'on a touché le fond, ils creusent.",
     "Lui il est capable de grenouiller dans des instances d'actionnaires.",
+    "Tu peux commencer à mourir, on va te soigner. Enfin, elle va te soigner.",
 ];
