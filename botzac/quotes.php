@@ -47,5 +47,5 @@ $quotes = [
     'Lui il est capable de grenouiller dans des instances d’actionnaires.',
     'Tu peux commencer à mourir, on va te soigner. Enfin, elle va te soigner.',
     'La machine de staging elle est un peu vitaminée mais bon pas tant que ça.',// En expliquant à Typhon sur quoi on fait tourner notre IC
-    'Y a pas le début du commencement d’une cacahuète'
+    'Y a pas le début du commencement d’une cacahuète.'
 ];
