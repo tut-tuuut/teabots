@@ -36,7 +36,7 @@ $quotes = [
     'Vous faites des trucs d’ambitieux hein, pas des trucs de touche pipi.',
     'Tu seras béni sur sept générations.',
     'Il y a peut-être une paille au milieu.',
-    'Ha ha ha ha, staging alive, staging alive...',
+    'Ha ha ha ha, staging alive, staging alive…',
     'Dans /dev/null, personne ne vous entend crier.',
     'Il y en a qui vendent leur âme au diable, Pascal lui il vend sa RAM à MySQL.',
     'On les a un peu trop pris pour des allemands.',
@@ -48,5 +48,6 @@ $quotes = [
     'Tu peux commencer à mourir, on va te soigner. Enfin, elle va te soigner.',
     'La machine de staging elle est un peu vitaminée mais bon pas tant que ça.',// En expliquant à Typhon sur quoi on fait tourner notre IC
     'Y a pas le début du commencement d’une cacahuète.',
-    'Même les plus ayatollesques ont pas tiqué sur le truc, alors bon.'
+    'Même les plus ayatollesques ont pas tiqué sur le truc, alors bon.',
+    'Le boostrap c’est comme l’acronymse du LISP (List of Insipide and Stupid Parenthésis), sauf que c’est avec des div… LISD (List of Insipide and Stupid Div).'
 ];
