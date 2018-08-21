@@ -49,5 +49,6 @@ $quotes = [
     'La machine de staging elle est un peu vitaminée mais bon pas tant que ça.',// En expliquant à Typhon sur quoi on fait tourner notre IC
     'Y a pas le début du commencement d’une cacahuète.',
     'Même les plus ayatollesques ont pas tiqué sur le truc, alors bon.',
-    'Le boostrap c’est comme l’acronymse du LISP (List of Insipide and Stupid Parenthésis), sauf que c’est avec des div… LISD (List of Insipide and Stupid Div).'
+    'Le boostrap c’est comme l’acronymse du LISP (List of Insipide and Stupid Parenthésis), sauf que c’est avec des div… LISD (List of Insipide and Stupid Div).',
+    'Il va falloir qu’ils s’accrochent à leurs slips parce que là j’crois que je vais m’énerver.',
 ];
