@@ -15,21 +15,24 @@ $memcached->set(LAST_QUOTE_KEY, $quote);
 
 switch($_SERVER['REQUEST_METHOD']) {
   case 'GET':
-    header('Content-Type: application/json');
-    $response = json_encode([
+    $response = [
       'color' => $colors[array_rand($colors)],
       'message' => $quote,
       'notify' => false,
       'message_format' => 'text'
-    ]);
+    ];
     break;
 
   case 'POST':
-    $response = $quote;
-  break;
+    $response = [
+      'response_type' => 'in_channel',
+      'text' => $quote
+    ];
+    break;
 
   default:
     break;
 }
 
-echo $response;
+header('Content-Type: application/json');
+echo json_encode($response);
