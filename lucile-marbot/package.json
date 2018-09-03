@@ -1,12 +1,11 @@
 {
   "name": "lucile-marbot",
-  "version": "0.0.2",
-  "description": "Fetch twitter news and post it to hipchat",
+  "version": "0.0.3",
+  "description": "Fetch twitter news and post it to Slack",
   "main": "index.js",
   "dependencies": {
-    "node-hipchat-plus": "^0.5.1",
-    "twit": "^2.2.3"
+    "request-promise-native": "^1.0.5",
+    "twit": "^2.2.11"
   },
-  "devDependencies": {},
   "author": "Johan Poirier <johan.poirier@gmail.com> (https://twitter.com/johanpoirier)"
 }
