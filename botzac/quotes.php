@@ -40,7 +40,7 @@ $quotes = [
     'Dans /dev/null, personne ne vous entend crier.',
     'Il y en a qui vendent leur âme au diable, Pascal lui il vend sa RAM à MySQL.',
     'On les a un peu trop pris pour des Allemands.',
-    'Je vous serai donc gré de suivre vos dossiers avant de faire des réponses à l’emporte pièce.',
+    'Je vous saurais donc gré de suivre vos dossiers avant de faire des réponses à l’emporte pièce.',
     'Je suis venu, j’ai vu, et j’ai qu’un seul cul.',
     'S’il y en a un qui fait tilt, on prend la motte au cul.',
     'Quand je pense qu’on a touché le fond, ils creusent.',
