@@ -52,4 +52,5 @@ $quotes = [
     'Le boostrap c’est comme l’acronymse du LISP (List of Insipide and Stupid Parenthésis), sauf que c’est avec des div… LISD (List of Insipide and Stupid Div).',
     'Il va falloir qu’ils s’accrochent à leurs slips parce que là j’crois que je vais m’énerver.',
     'Tu veux des données ? J’en ai tout le tour du ventre des données !',
+    'Si on part tout en haut, faut pas oublier de gratter au fond quand même',
 ];
