@@ -53,4 +53,6 @@ $quotes = [
     'Il va falloir qu’ils s’accrochent à leurs slips parce que là j’crois que je vais m’énerver.',
     'Tu veux des données ? J’en ai tout le tour du ventre des données !',
     'Si on part tout en haut, faut pas oublier de gratter au fond quand même.',
+    'A quoi sert TLS ? A tenir ton chien !',
+    'Roulé sous l\'SSL !',
 ];
