@@ -55,6 +55,6 @@ $quotes = [
     'Si on part tout en haut, faut pas oublier de gratter au fond quand même.',
     'A quoi sert TLS ? A tenir ton chien !',
     'Roulé a la main sous l‘SSL !',
-    'En tout cas, y’a une esbrouffe là dessous.',
+    'En tout cas, y’a une esbrouffe là-dessous.',
     'Là si ça marche, je me fais monter une statue dans l’open space.',
 ];
