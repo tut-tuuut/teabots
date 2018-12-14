@@ -57,5 +57,6 @@ $quotes = [
     'Roulé a la main sous l‘SSL !',
     'En tout cas, y’a une esbrouffe là-dessous.',
     'Là si ça marche, je me fais monter une statue dans l’open space.',
-    'Je vous emmerde... mais en toute cordialité.',
+    'Je vous emmerde… mais en toute cordialité.',
+    'Là c’était pas un coup d’oeil, c’était un coup de pied !',
 ];
