@@ -53,11 +53,12 @@ $quotes = [
     'Il va falloir qu’ils s’accrochent à leurs slips parce que là j’crois que je vais m’énerver.',
     'Tu veux des données ? J’en ai tout le tour du ventre des données !',
     'Si on part tout en haut, faut pas oublier de gratter au fond quand même.',
-    'A quoi sert TLS ? A tenir ton chien !',
+    'À quoi sert TLS ? À tenir ton chien !',
     'Roulé a la main sous l‘SSL !',
     'En tout cas, y’a une esbrouffe là-dessous.',
     'Là si ça marche, je me fais monter une statue dans l’open space.',
     'Je vous emmerde… mais en toute cordialité.',
     'Là c’était pas un coup d’œil, c’était un coup de pied !',
     'Le pépère, il va avaler son chapeau.',
+    'Il y a une chiure dans le ventilo.',
 ];
